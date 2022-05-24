@@ -15,6 +15,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	longueur_kart *= proportion;
 	largeur_kart *= proportion;
 	hauteur_kart *= proportion;
+	baseKartTheorique.initialize(mesh_primitive_cube(vec3(0, 0, 0), 0.001),"baseKartTheorique");
 	baseKart.initialize(mesh_primitive_parapede(longueur_kart, largeur_kart, hauteur_kart), "baseKart");
 	baseKart.shading.color = { 0.8,0.8,0.8 };
 	//Element Proche de la base du kart
@@ -98,7 +99,8 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	lienTurbo2.shading.color = { 1.0,1.0,1.0 };
 	turbo1.shading.color = { 0.3,0.3,0.3 };
 	turbo2.shading.color = { 0.3,0.3,0.3 };
-	kart.add(baseKart);
+	kart.add(baseKartTheorique);
+	kart.add(baseKart,"baseKartTheorique",{-longueur_kart /2.0, - largeur_kart /2.0,0});
 	kart.add(kartGauche, "baseKart", { longueur_kart / 4.0,largeur_kart,0 });
 	kart.add(kartDroite, "baseKart", { longueur_kart / 4.0,-0.4 * largeur_kart,0 });
 	kart.add(kartArriere, "baseKart", { 0.0,0,hauteur_kart });
@@ -149,7 +151,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	kart.add(lienTurbo2, "porteTurbo2", { 0,0,0.3 * largeur_kart });
 	kart.add(turbo1, "porteTurbo1", affine_rts(rotation_transform::from_axis_angle({ 0,1,0 }, Pi / 12.0), { -0.25 * longueur_kart,0,0.5 * largeur_kart }, 1.0));
 	kart.add(turbo2, "porteTurbo2", affine_rts(rotation_transform::from_axis_angle({ 0,1,0 }, Pi / 12.0), { -0.25 * longueur_kart,0,0.5 * largeur_kart }, 1.0));
-	kart["baseKart"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
+	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 void Kart::faireAvancerKart(float t, Trajectoire traj)
 {
@@ -162,6 +164,34 @@ void Kart::faireAvancerKart(float t, Trajectoire traj)
 	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
 	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
 	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
+}
+void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
+{
+	float t_max = traj.key_times[traj.nPoints-2];
+	float t_min = traj.key_times[1];
+	std::cout << find_index_of_interval(t_min + 0.01, traj.key_times) << std::endl;
+	if (avancement > t_max - 0.01)
+	{
+		avancement = t_min + 0.011;
+
+	}
+	if (avancement < t_min + 0.005)
+	{
+		std::cout << "dsgfsdg" << std::endl;
+		avancement = t_max - 0.011;
+	}
+	vec3 p = interpolation(avancement, traj.key_positions, traj.key_times);
+	vec3 p_prec = interpolation(avancement - 0.01, traj.key_positions, traj.key_times);
+	//vec3 p_p = derivee_interpolation(avancement, traj.key_positions, traj.key_times);
+	//vec3 p_p_prec = derivee_interpolation(avancementPrec, traj.key_positions, traj.key_times);
+	//kart["baseKart"].transform.rotation =  kart["baseKart"].transform.rotation * rotation_transform::between_vector(p_p_prec / norm(p_p_prec),p_p / norm(p_p));
+
+	kart["baseKartTheorique"].transform.rotation = rotation_transform::between_vector({ 1.0,0.0,0.0 }, (p - p_prec) / norm(p - p_prec));
+	kart["baseKartTheorique"].transform.translation = p;
+	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * avancement);
+	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * avancement);
+	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * avancement);
+	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * avancement);
 }
 hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, float hauteur_kart, float proportion, vec3 color1, vec3 color2,const char *nFileFrontKart)
 {

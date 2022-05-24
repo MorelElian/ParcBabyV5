@@ -48,7 +48,7 @@ struct scene_structure {
 
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
-	cgp::hierarchy_mesh_drawable kartMario;
+	Kart* kartMario;
 	cgp::hierarchy_mesh_drawable kartLuigi;
 	cgp::mesh_drawable rollercoaster;
 
