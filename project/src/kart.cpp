@@ -149,14 +149,14 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	kart.add(lienTurbo2, "porteTurbo2", { 0,0,0.3 * largeur_kart });
 	kart.add(turbo1, "porteTurbo1", affine_rts(rotation_transform::from_axis_angle({ 0,1,0 }, Pi / 12.0), { -0.25 * longueur_kart,0,0.5 * largeur_kart }, 1.0));
 	kart.add(turbo2, "porteTurbo2", affine_rts(rotation_transform::from_axis_angle({ 0,1,0 }, Pi / 12.0), { -0.25 * longueur_kart,0,0.5 * largeur_kart }, 1.0));
-	
-
+	kart["baseKart"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 void Kart::faireAvancerKart(float t, Trajectoire traj)
 {
 	vec3 p = traj.positionKart(t);
-	vec3 p_p = traj.deriveePositionKart(t);
-	kart["baseKart"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), p_p / norm(p_p));
+	vec3 p_prec = traj.positionKart(t - 0.0001);
+	
+	kart["baseKart"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
 	kart["baseKart"].transform.translation = p;
 	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
 	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
@@ -347,5 +347,7 @@ hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, flo
 	kart.add(lienTurbo2, "porteTurbo2", { 0,0,0.3 * largeur_kart });
 	kart.add(turbo1, "porteTurbo1", affine_rts(rotation_transform::from_axis_angle({ 0,1,0 }, Pi / 12.0), { -0.25 * longueur_kart,0,0.5 * largeur_kart }, 1.0));
 	kart.add(turbo2, "porteTurbo2", affine_rts(rotation_transform::from_axis_angle({ 0,1,0 }, Pi / 12.0), { -0.25 * longueur_kart,0,0.5 * largeur_kart }, 1.0));
+	//kart["baseKart"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
+
 	return kart;
 }

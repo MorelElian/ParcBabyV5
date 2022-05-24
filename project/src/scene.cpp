@@ -132,6 +132,7 @@ void scene_structure::display()
 	//  This is this function that you need to complete
 	//vec3 p = interpolation_hermite(t, keyframe.key_positions, keyframe.key_times, key_derivee);
 	//vec3 p_p = derivee_hermite(t, keyframe.key_positions, keyframe.key_times,key_derivee);
+	avancementPrecedent = avancementKart;
 	if (keyboard.up)
 	{
 		avancementKart += 0.04;
@@ -140,12 +141,12 @@ void scene_structure::display()
 	{
 		avancementKart -= 0.01;
 	}
-	faireAvancerKart(avancementKart, kartMario, timer.t_min, timer.t_max, keyframe);
+	faireAvancerKart(avancementPrecedent,avancementKart, kartMario, timer.t_min, timer.t_max, keyframe);
 	kartMario.update_local_to_global_coordinates();
 	kartLuigi.update_local_to_global_coordinates();
 	draw(kartMario, environment);
-	Trajectoire t1("t1", keyframe.key_positions, keyframe.key_times, interpolation, derivee_interpolation);
-	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation, derivee_interpolation);
+	Trajectoire t1("t1", keyframe.key_positions, keyframe.key_times, interpolation);
+	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation);
 	kartTest[0]->faireAvancerKart(t, t1);
 	kartTest[1]->faireAvancerKart(t, t2);
 	for(int i = 0;i<3;i++)

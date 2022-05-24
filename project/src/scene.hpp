@@ -65,7 +65,8 @@ struct scene_structure {
 	cgp::buffer<cgp::vec3> key_positions;
 	cgp::buffer<cgp::vec3> key_derivee;
 	cgp::buffer<float> key_times2;
-	float avancementKart = 1.1;
+	float avancementKart = 1.5;
+	float avancementPrecedent = 1.1;
 	Kart* kartTest[3];
 	//double avancement_update = 1.0;
 
