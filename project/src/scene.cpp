@@ -91,8 +91,8 @@ void scene_structure::update_camera()
 	float compteur = 0;
 	float t = timer.t;
 	vec3 p = interpolation(avancementKart, keyframe.key_positions, keyframe.key_times);
-	vec3 p_p = derivee_interpolation(avancementKart, keyframe.key_positions, keyframe.key_times);
-	vec3 posCamera =p -  p_p / norm(p_p) * 8 + vec3(-0.5,0,3);
+	vec3 p_prec = interpolation(avancementKart - 0.001, keyframe.key_positions, keyframe.key_times);
+	vec3 posCamera =p -  (p-p_prec) / norm(p - p_prec) * 8 + vec3(-0.5,0,3);
 	vec3 regardCamera = p + vec3(0,0,2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }

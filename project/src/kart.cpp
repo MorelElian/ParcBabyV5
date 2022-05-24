@@ -154,7 +154,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 void Kart::faireAvancerKart(float t, Trajectoire traj)
 {
 	vec3 p = traj.positionKart(t);
-	vec3 p_prec = traj.positionKart(t - 0.0001);
+	vec3 p_prec = traj.positionKart(t - 0.001);
 	
 	kart["baseKart"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
 	kart["baseKart"].transform.translation = p;
