@@ -49,20 +49,26 @@ void scene_structure::initialize()
 	skybox.initialize("assets/Gu_RainbowRoad/","skybox");
 	racetrack = create_racetrack_mesh_drawable();
 
+	//Initialisation trajectoires
+	tabTrajectoire = new Trajectoire[nTraj];
+	tabKart = new Kart[nTraj];
+	buffer<float> key_times = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f };
+	for (int i = 0; i < nTraj; i++)
+	{
+		buffer<vec3> key_positions = { {((float) (i+1)/nTraj) * disc_radius / (2.0),racetrack_length / 2.0f,4*i}, {disc_radius / 2.0f,racetrack_length / 2.0f,4*i}, {disc_radius / 2.0f,racetrack_length,4*i}, {0,racetrack_length + disc_radius / 2.0f,0}, {-disc_radius / 2.0f,racetrack_length,0}, {-disc_radius / 2.0f,racetrack_length / 2.0f,0}, {-disc_radius / 2.0f,0,0}, {0,-disc_radius / 2.0f,0}, {disc_radius / 2,0,0}, {disc_radius / 2.0f,racetrack_length / 2.0f,0}, {disc_radius / 2.0f,racetrack_length / 2.0f,0} };
+
+		tabTrajectoire[i] = Trajectoire("test", key_positions, key_times, interpolation, 11);
+		tabKart[i] = Kart("kartLuigi", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(0, (float) i / (float) nTraj, 1.0));
+	}
+	buffer<vec3> key_positions = { {disc_radius / 2.0f,racetrack_length / 2.0f,0}, {disc_radius / 2.0f,racetrack_length / 2.0f,0}, {disc_radius / 2.0f,racetrack_length,0}, {0,racetrack_length + disc_radius / 2.0f,0}, {-disc_radius / 2.0f,racetrack_length,0}, {-disc_radius / 2.0f,racetrack_length / 2.0f,0}, {-disc_radius / 2.0f,0,0}, {0,-disc_radius / 2.0f,0}, {disc_radius / 2,0,0}, {disc_radius / 2.0f,racetrack_length / 2.0f,0}, {disc_radius / 2.0f,racetrack_length / 2.0f,0} };
+	key_derivee = { {0,racetrack_length,0},{0,racetrack_length,0},{0,racetrack_length / 3.0,0},{-racetrack_length / 2.0,0,0},{0,racetrack_length,0},{0,racetrack_length,0},{0,-1,0},{1,0,0},{0,1,0},{0,1,0},{0,1,0} };
+	// Key times (time at which the position must pass in the corresponding position)
+	
+	key_times2 = { 0.0f, 1.0f, 3.0f, 5.0f, 7.0f, 9.0f, 11.0f, 13.0f, 15.0f, 17.0f, 19.0f };
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(0, 0, 1.0));
 	kartLuigi = create_kart(1.2,0.4,0.15,10.0,vec3(0.0,0.0,1.0),vec3(1.0,1.0,0.0),"assets/sigleMario.png");
-	for (int i = 0; i < 3; i++)
-	{
-		kartTest[i] = new Kart("kartLuigi", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(0, 0, 1.0));
-	}
-
 
 	// Key 3D positions
-	buffer<vec3> key_positions = { {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length,0}, {0,racetrack_length + disc_radius/2.0f,0}, {-disc_radius/2.0f,racetrack_length,0}, {-disc_radius/2.0f,racetrack_length/2.0f,0}, {-disc_radius/2.0f,0,0}, {0,-disc_radius/2.0f,0}, {disc_radius/2,0,0}, {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length/2.0f,0} };
-	key_derivee = {{0,racetrack_length,0},{0,racetrack_length,0},{0,racetrack_length/3.0,0},{-racetrack_length/2.0,0,0},{0,racetrack_length,0},{0,racetrack_length,0},{0,-1,0},{1,0,0},{0,1,0},{0,1,0},{0,1,0} };
-	// Key times (time at which the position must pass in the corresponding position)
-	buffer<float> key_times = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f };
-	key_times2 = { 0.0f, 1.0f, 3.0f, 5.0f, 7.0f, 9.0f, 11.0f, 13.0f, 15.0f, 17.0f, 19.0f };
 
 	// Initialize the helping structure to display/interact with these positions
 	keyframe.initialize(key_positions, key_times);
@@ -145,13 +151,13 @@ void scene_structure::display()
 	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation,11);
 	kartMario->faireAvancerKartManuel(avancementKart, t1);
 	kartMario->kart.update_local_to_global_coordinates();
-	kartTest[0]->faireAvancerKart(t, t1);
-	kartTest[1]->faireAvancerKart(t, t2);
-	for(int i = 0;i<3;i++)
+	for(int i = 0;i<nTraj;i++)
 	{
-		kartTest[i]->kart.update_local_to_global_coordinates();
+		tabKart[i].faireAvancerKart(t, tabTrajectoire[i]);
 
-		draw(kartTest[i]->kart, environment);
+		tabKart[i].kart.update_local_to_global_coordinates();
+
+		draw(tabKart[i].kart, environment);
 	}
 	
 	draw(kartMario->kart, environment);

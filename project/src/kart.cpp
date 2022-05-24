@@ -175,7 +175,7 @@ void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 		avancement = t_min + 0.011;
 
 	}
-	if (avancement < t_min + 0.005)
+	if (avancement < t_min + 0.01)
 	{
 		std::cout << "dsgfsdg" << std::endl;
 		avancement = t_max - 0.011;
