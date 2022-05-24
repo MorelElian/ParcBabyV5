@@ -50,7 +50,8 @@ struct scene_structure {
 	cgp::hierarchy_mesh_drawable racetrack;
 	Kart* kartMario;
 	cgp::hierarchy_mesh_drawable kartLuigi;
-	cgp::mesh_drawable terrain;
+	cgp::mesh_drawable rollercoaster;
+
 
 	// ****************************** //
 	// Functions

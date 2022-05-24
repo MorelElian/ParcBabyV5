@@ -48,6 +48,7 @@ void scene_structure::initialize()
 	// terrain.shading.color = { 0.6f,0.85f,0.5f };
 	skybox.initialize("assets/Gu_RainbowRoad/","skybox");
 	racetrack = create_racetrack_mesh_drawable();
+	rollercoaster = create_rollercoaster_mesh_drawable();
 
 	//Initialisation trajectoires
 	tabTrajectoire = new Trajectoire[nTraj];
@@ -77,6 +78,8 @@ void scene_structure::initialize()
 	timer.t_min = key_times[1];
 	timer.t_max = key_times[N - 2];
 	timer.t = timer.t_min;
+
+
 	
 
 	//int idx = find_index_of_interval(2.0, key_times);
@@ -124,6 +127,7 @@ void scene_structure::display()
 
 	racetrack.update_local_to_global_coordinates();
 	draw(racetrack, environment);
+	//draw(rollercoaster, environment);
 	
 	// Update the current time
 	timer.update();
