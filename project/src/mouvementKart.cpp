@@ -2,7 +2,7 @@
 using namespace cgp;
 void faireAvancerKart(float &avancement, hierarchy_mesh_drawable& kart,float t_min,float t_max, keyframe_structure keyframe)
 {
-	std::cout << avancement << std::endl;
+	//std::cout << avancement << std::endl;
 	if (avancement > t_max -0.01 )
 	{
 		avancement = t_min+0.1;

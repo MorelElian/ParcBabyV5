@@ -48,6 +48,8 @@ int main(int, char* argv[])
 	//     Animation Loop
 	// ************************ //
 	std::cout<<"Start animation loop ..."<<std::endl;
+	bool camera = false;
+
 	while (!glfwWindowShouldClose(window))
 	{
 		// Reset the screen for a new frame
@@ -58,8 +60,17 @@ int main(int, char* argv[])
 		scene.display_gui();
 
 		// Call the display of the scene
-		
-		//scene.update_camera();
+		if (!scene.inputs.keyboard.shift)
+		{
+			std::cout << "shift" << std::endl;
+			camera = -camera;
+			scene.update_camera();
+		}
+		/*if (camera)
+		{
+			scene.update_camera();
+		}
+		*/
 		scene.display();
 		
 		// End of ImGui display and handle GLFW events
