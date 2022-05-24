@@ -62,7 +62,7 @@ int main(int, char* argv[])
 		// Call the display of the scene
 		if (!scene.inputs.keyboard.shift)
 		{
-			std::cout << "shift" << std::endl;
+			//std::cout << "shift" << std::endl;
 			camera = -camera;
 			scene.update_camera();
 		}

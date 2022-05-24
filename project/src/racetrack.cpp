@@ -51,6 +51,7 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	cgp::mesh_drawable departure3;
 	cgp::mesh_drawable departure4;
 	cgp::mesh_drawable departure_sign;
+	cgp::mesh_drawable departure_sign2;
 	cgp::mesh_drawable departure_line;
 
     cgp::mesh_drawable tube1;
@@ -124,7 +125,12 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	mesh departure_sign_mesh = mesh_primitive_parapede(disc_radius - turn_radius - 2*departure_radius, 2*departure_thickness, sign_height);
 	departure_sign.initialize(departure_sign_mesh, "departure_sign");
 
+	mesh departure_sign2_mesh = mesh_primitive_quadrangle({turn_radius + departure_radius,racetrack_length/2.0f - departure_thickness, departure_height}, {disc_radius - departure_radius,racetrack_length/2.0f - departure_thickness,departure_height}, {disc_radius - departure_radius,racetrack_length/2.0f - departure_thickness,departure_height + sign_height}, {turn_radius + departure_radius,racetrack_length/2.0f - departure_thickness,departure_height + sign_height});
+	departure_sign2_mesh.uv = { {-0.4,0}, {1.4,0}, {1.4,1}, {-0.4,1} };
+	departure_sign2.initialize(departure_sign2_mesh, "departure_sign2");
+
 	mesh departure_line_mesh = mesh_primitive_quadrangle({turn_radius,racetrack_length/2.0f - departure_thickness,0.1}, {disc_radius,racetrack_length/2.0f - departure_thickness,0.1}, {disc_radius,racetrack_length/2.0f + departure_thickness,0.1}, {turn_radius,racetrack_length/2.0f + departure_thickness,0.1});
+	departure_line_mesh.uv = { {0,0}, {0,8}, {1,8}, {1,0} };
 	departure_line.initialize(departure_line_mesh, "departure_line");
 
 
@@ -132,8 +138,10 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	departure2.shading.color = {1,0,0};
 	departure3.shading.color = {1,0,0};
 	departure4.shading.color = {1,0,0};
-	//departure_sign.shading.color = {1,1,1};
-	departure_sign.texture = opengl_load_texture_image("assets/logo.png", GL_REPEAT, GL_REPEAT);
+	departure_sign.shading.color = {1,0,0};
+	float color[] = { 1.0f, 0.0f, 0.0f, 1.0f };
+	glTexParameterfv(GL_TEXTURE_2D, GL_TEXTURE_BORDER_COLOR, color);
+	departure_sign2.texture = opengl_load_texture_image("assets/logo.png", GL_CLAMP_TO_BORDER, GL_CLAMP_TO_BORDER);
 	departure_line.texture = opengl_load_texture_image("assets/arrival.png", GL_REPEAT, GL_REPEAT);
 
     //TUBE
@@ -362,6 +370,9 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 
 	departure_sign.transform.translation = {turn_radius + departure_radius,racetrack_length/2.0f - departure_thickness, departure_height + departure_radius};
 	racetrack.add(departure_sign,"racetrack1");
+
+	departure_sign2.transform.translation = {0,-0.01f,departure_radius};
+	racetrack.add(departure_sign2,"racetrack1");
 
 	racetrack.add(departure_line, "racetrack1");
 
