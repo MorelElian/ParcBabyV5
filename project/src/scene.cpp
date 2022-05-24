@@ -49,14 +49,13 @@ void scene_structure::initialize()
 	skybox.initialize("assets/Gu_RainbowRoad/","skybox");
 	racetrack = create_racetrack_mesh_drawable();
 
-	kartMario = create_kart(1.2,0.4,0.15,3.0,vec3(0.0,0.0,1.0),vec3(1.0,0.0,0.0),"assets/sigleMario.png");
+	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(0, 0, 1.0));
 	kartLuigi = create_kart(1.2,0.4,0.15,10.0,vec3(0.0,0.0,1.0),vec3(1.0,1.0,0.0),"assets/sigleMario.png");
 	for (int i = 0; i < 3; i++)
 	{
 		kartTest[i] = new Kart("kartLuigi", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(0, 0, 1.0));
 	}
 
-	//test();
 
 	// Key 3D positions
 	buffer<vec3> key_positions = { {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length,0}, {0,racetrack_length + disc_radius/2.0f,0}, {-disc_radius/2.0f,racetrack_length,0}, {-disc_radius/2.0f,racetrack_length/2.0f,0}, {-disc_radius/2.0f,0,0}, {0,-disc_radius/2.0f,0}, {disc_radius/2,0,0}, {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length/2.0f,0} };
@@ -132,21 +131,20 @@ void scene_structure::display()
 	//  This is this function that you need to complete
 	//vec3 p = interpolation_hermite(t, keyframe.key_positions, keyframe.key_times, key_derivee);
 	//vec3 p_p = derivee_hermite(t, keyframe.key_positions, keyframe.key_times,key_derivee);
-	avancementPrecedent = avancementKart;
 	if (keyboard.up)
 	{
-		avancementKart += 0.04;
+		avancementKart += 0.02;
 	}
 	if (keyboard.down)
 	{
 		avancementKart -= 0.01;
 	}
-	faireAvancerKart(avancementPrecedent,avancementKart, kartMario, timer.t_min, timer.t_max, keyframe);
-	kartMario.update_local_to_global_coordinates();
+	
 	kartLuigi.update_local_to_global_coordinates();
-	draw(kartMario, environment);
-	Trajectoire t1("t1", keyframe.key_positions, keyframe.key_times, interpolation);
-	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation);
+	Trajectoire t1("t1", keyframe.key_positions, keyframe.key_times, interpolation,11);
+	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation,11);
+	kartMario->faireAvancerKartManuel(avancementKart, t1);
+	kartMario->kart.update_local_to_global_coordinates();
 	kartTest[0]->faireAvancerKart(t, t1);
 	kartTest[1]->faireAvancerKart(t, t2);
 	for(int i = 0;i<3;i++)
@@ -156,7 +154,7 @@ void scene_structure::display()
 		draw(kartTest[i]->kart, environment);
 	}
 	
-	draw(kartMario, environment);
+	draw(kartMario->kart, environment);
 	//draw(kartLuigi, environment);
 	
 	keyframe.display_current_position(interpolation(avancementKart, keyframe.key_positions, keyframe.key_times), environment);

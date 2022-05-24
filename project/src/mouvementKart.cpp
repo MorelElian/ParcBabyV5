@@ -19,8 +19,8 @@ void faireAvancerKart(float avancementPrec, float& avancement, hierarchy_mesh_dr
 	vec3 p_p_prec = derivee_interpolation(avancementPrec, keyframe.key_positions, keyframe.key_times);
 	//kart["baseKart"].transform.rotation =  kart["baseKart"].transform.rotation * rotation_transform::between_vector(p_p_prec / norm(p_p_prec),p_p / norm(p_p));
 	
-	kart["baseKart"].transform.rotation = rotation_transform::between_vector({1.0,0.0,0.0}, (p - p_prec) / norm(p - p_prec));
-	kart["baseKart"].transform.translation = p;
+	kart["baseKartTheorique"].transform.rotation = rotation_transform::between_vector({1.0,0.0,0.0}, (p - p_prec) / norm(p - p_prec));
+	kart["baseKartTheorique"].transform.translation = p;
 	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * avancement);
 	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * avancement);
 	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * avancement);

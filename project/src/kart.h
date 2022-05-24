@@ -1,6 +1,7 @@
 #pragma once
 #include "cgp/cgp.hpp"
 #include "trajectoire.hpp"
+#include "interpolation.h"
 using namespace cgp;
 class Kart
 {
@@ -17,7 +18,9 @@ public:
 	hierarchy_mesh_drawable kart;
 	Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2);
 	void faireAvancerKart(float t, Trajectoire traj);
+	void faireAvancerKartManuel(float& avancement, Trajectoire traj);
 protected:
+	mesh_drawable baseKartTheorique;
 	mesh_drawable baseKart;
 	mesh_drawable kartGauche;
 	mesh_drawable kartDroite;
