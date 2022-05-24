@@ -19,6 +19,7 @@ int turn_resolution = 5;
 float departure_height = 2.5;
 float departure_thickness = 0.7;
 float departure_radius = 2;
+float sign_height = departure_height;
 
 float tube_height = 8;
 float tube_thickness = 1;
@@ -34,7 +35,9 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
     cgp::hierarchy_mesh_drawable racetrack;
 
     cgp::mesh_drawable disc1;
+	cgp::mesh_drawable disc2;
 	cgp::mesh_drawable racetrack1;
+	cgp::mesh_drawable racetrack2;
 	cgp::mesh_drawable thickness1;
 	cgp::mesh_drawable thickness2;
 	
@@ -47,6 +50,8 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	cgp::mesh_drawable departure2;
 	cgp::mesh_drawable departure3;
 	cgp::mesh_drawable departure4;
+	cgp::mesh_drawable departure_sign;
+	cgp::mesh_drawable departure_line;
 
     cgp::mesh_drawable tube1;
     cgp::mesh_drawable turn1_tube1;
@@ -66,9 +71,17 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 
     //PISTE
 	disc1.initialize(mesh_primitive_disc(disc_radius), "disc");
+	disc1.texture = opengl_load_texture_image("assets/pisteBleue.png", GL_REPEAT, GL_REPEAT);
 
-	mesh racetrack1_mesh = mesh_primitive_quadrangle({ -disc_radius,0,0 }, { disc_radius,0,0 }, { disc_radius,racetrack_length,0 }, { -disc_radius,racetrack_length,0 });
-	racetrack1.initialize(racetrack1_mesh, "racetrack1");
+	disc2.initialize(mesh_primitive_disc(disc_radius), "disc2");
+	disc2.texture = opengl_load_texture_image("assets/pisteRouge.png", GL_REPEAT, GL_REPEAT);
+
+	mesh racetrack_mesh = mesh_primitive_quadrangle({ -disc_radius,0,0 }, { disc_radius,0,0 }, { disc_radius,racetrack_length/2.0f,0 }, { -disc_radius,racetrack_length/2.0f,0 });
+	racetrack1.initialize(racetrack_mesh, "racetrack1");
+	racetrack1.texture = opengl_load_texture_image("assets/pisteBleue.png", GL_REPEAT, GL_REPEAT);
+
+	racetrack2.initialize(racetrack_mesh, "racetrack2");
+	racetrack2.texture = opengl_load_texture_image("assets/pisteRouge.png", GL_REPEAT, GL_REPEAT);
 
 	mesh thickness1_mesh = mesh_primitive_cylinder(racetrack_thickness,{disc_radius,0,0},{disc_radius,racetrack_length,0});
 	thickness1.initialize(thickness1_mesh, "thickness1");
@@ -105,13 +118,23 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	mesh departure3_mesh = mesh_primitive_cylinder(departure_thickness,{turn_radius,racetrack_length/2.0,0},{turn_radius,racetrack_length/2.0,departure_height});
 	departure3.initialize(departure3_mesh, "departure3");
 
-	mesh departure4_mesh = mesh_primitive_parapede(2*departure_thickness, disc_radius-turn_radius, 2*departure_thickness);
-	//mesh departure4_mesh = mesh_primitive_ellipsoid(vec3(disc_radius/2.0,departure_radius,departure_radius), vec3((disc_radius + departure_radius) / 2.0,racetrack_length/2.0,departure_height + departure_radius));
+	mesh departure4_mesh = mesh_primitive_cylinder_bis(departure_thickness, {turn_radius + departure_radius,racetrack_length/2.0,departure_height + departure_radius},{disc_radius-departure_radius,racetrack_length/2.0,departure_height + departure_radius}, 100, 100, true, 1);
 	departure4.initialize(departure4_mesh, "departure4");
+
+	mesh departure_sign_mesh = mesh_primitive_parapede(disc_radius - turn_radius - 2*departure_radius, 2*departure_thickness, sign_height);
+	departure_sign.initialize(departure_sign_mesh, "departure_sign");
+
+	mesh departure_line_mesh = mesh_primitive_quadrangle({turn_radius,racetrack_length/2.0f - departure_thickness,0.1}, {disc_radius,racetrack_length/2.0f - departure_thickness,0.1}, {disc_radius,racetrack_length/2.0f + departure_thickness,0.1}, {turn_radius,racetrack_length/2.0f + departure_thickness,0.1});
+	departure_line.initialize(departure_line_mesh, "departure_line");
+
 
 	departure.shading.color = {1,0,0};
 	departure2.shading.color = {1,0,0};
 	departure3.shading.color = {1,0,0};
+	departure4.shading.color = {1,0,0};
+	//departure_sign.shading.color = {1,1,1};
+	departure_sign.texture = opengl_load_texture_image("assets/logo.png", GL_REPEAT, GL_REPEAT);
+	departure_line.texture = opengl_load_texture_image("assets/arrival.png", GL_REPEAT, GL_REPEAT);
 
     //TUBE
     mesh tube_mesh = mesh_primitive_cylinder(tube_thickness,{0,0,tube_height},{0,racetrack_length,tube_height});
@@ -167,15 +190,21 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	//PISTE 
 	racetrack.add(racetrack1);
 
-	racetrack1.name = "racetrack2";
+	racetrack2.transform.translation = {0,racetrack_length/2.0f,0};
+	racetrack.add(racetrack2, "racetrack1");
+
+	racetrack1.name = "racetrack3";
 	racetrack1.transform.translation = {0,0,-2*racetrack_thickness};
 	racetrack.add(racetrack1, "racetrack1");
 
+	racetrack2.name = "racetrack4";
+	racetrack2.transform.translation = {0,racetrack_length/2.0f,-2*racetrack_thickness};
+	racetrack.add(racetrack2, "racetrack1");
+
 	racetrack.add(disc1, "racetrack1");
 	
-	disc1.transform.translation = {0,racetrack_length,0};
-	disc1.name = "disc2";
-	racetrack.add(disc1, "racetrack1");
+	disc2.transform.translation = {0,racetrack_length,0};
+	racetrack.add(disc2, "racetrack1");
 
 	disc1.transform.translation = {0,racetrack_length,-2*racetrack_thickness};
 	disc1.name = "disc3";
@@ -325,8 +354,16 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	departure3.transform.translation = {disc_radius - turn_radius,0,0};
 	racetrack.add(departure3,"racetrack1");
 
-	departure4.transform.translation = {turn_radius, (racetrack_length-departure_radius)/2.0, departure_height + departure_radius + departure_thickness};
 	racetrack.add(departure4,"racetrack1");
+	
+	departure4.name = "departure6";
+	departure4.transform.translation = {0,0,sign_height};
+	racetrack.add(departure4,"racetrack1");
+
+	departure_sign.transform.translation = {turn_radius + departure_radius,racetrack_length/2.0f - departure_thickness, departure_height + departure_radius};
+	racetrack.add(departure_sign,"racetrack1");
+
+	racetrack.add(departure_line, "racetrack1");
 
     //TUBE
     tube1.transform.translation = {disc_radius,0,0};
