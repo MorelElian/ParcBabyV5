@@ -169,7 +169,7 @@ void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 {
 	float t_max = traj.key_times[traj.nPoints-2];
 	float t_min = traj.key_times[1];
-	std::cout << find_index_of_interval(t_min + 0.01, traj.key_times) << std::endl;
+	//std::cout << find_index_of_interval(t_min + 0.01, traj.key_times) << std::endl;
 	if (avancement > t_max - 0.01)
 	{
 		avancement = t_min + 0.011;

@@ -536,7 +536,7 @@ cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
 	float t = key_steps[1] + dt;
 	float tf = key_steps[key_steps.size() - 3];
 
-	std::cout << t << std::endl;
+	//std::cout << t << std::endl;
 	std::cout << interpolation(t, key_positions, key_steps) << std::endl;
 	std::cout << interpolation(t+dt, key_positions, key_steps) << std::endl;
 	mesh rc = mesh_primitive_cylinder(rc_thickness, interpolation(t, key_positions, key_steps), interpolation(t+dt, key_positions, key_steps));
