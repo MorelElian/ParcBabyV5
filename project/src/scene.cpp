@@ -49,7 +49,10 @@ void scene_structure::initialize()
 	skybox.initialize("assets/Gu_RainbowRoad/","skybox");
 	racetrack = create_racetrack_mesh_drawable();
 	rollercoaster = create_rollercoaster_mesh_drawable();
-
+	buffer<vec3> key_positions_cam = { {disc_radius / (2.0),racetrack_length / 2.0f ,10},{ 5.0 * disc_radius, -racetrack_length / 2.0f ,7}, { 5.0 * disc_radius ,racetrack_length / 2.0f,5}, {3 * disc_radius ,racetrack_length ,5}, {0,racetrack_length + disc_radius / 2.0f ,6},{-disc_radius,racetrack_length + disc_radius / 2.0f ,4}
+	,{disc_radius / (1.4),racetrack_length / 2.0f ,10},{disc_radius / (2.0),racetrack_length / 2.0f ,10} ,{disc_radius / (2.0),racetrack_length / 2.0f ,10} };
+	buffer<float> key_times_cam = { 0.0f, 1.0f, 5.0f, 7.0f, 12.0f, 14.0f,16.0f, 17.0f, 19.0f };
+	tCamera = Trajectoire("er", key_positions_cam, key_times_cam, interpolation, 9);
 	//Initialisation trajectoires
 	tabTrajectoire = new Trajectoire[nTraj];
 	tabKart = new Kart[nTraj];
@@ -57,8 +60,10 @@ void scene_structure::initialize()
 	for (int i = 0; i < nTraj; i++)
 	{
 		float decalage = 3.0;
-		buffer<vec3> key_positions = { {((float) (i+1)/nTraj) * disc_radius / (2.0),racetrack_length / 2.0f - 10 *i,0}, {disc_radius / 2.0f + 2 * i,racetrack_length / 2.0f,0}, {disc_radius / 2.0f+ 2 * i,racetrack_length + i,0}, {2 * i,racetrack_length + disc_radius / 2.0f - i ,0}, {-disc_radius / 2.0f - 2 * i,racetrack_length- i ,0}, {-disc_radius / 2.0f - 2 * i,racetrack_length / 2.0f,0}, {-disc_radius / 2.0f - 2 * i ,0,0}, {0,-disc_radius / 2.0f,0}, {disc_radius / 2 + 2 * i,0,0}, {disc_radius / 2.0f +2 *  i,racetrack_length / 2.0f,0}, {disc_radius / 2.0f +2 * i,racetrack_length / 2.0f,0} };
-
+		buffer<vec3> key_positions = { { disc_radius / (2.0),racetrack_length / 2.0f ,0}, {disc_radius / 2.0f,racetrack_length / 2.0f,0}, {disc_radius / 2.0f,racetrack_length ,0}, {0,racetrack_length + disc_radius / 2.0f ,0},
+			{-disc_radius / 2.0f ,racetrack_length ,0}, {-disc_radius / 2.0f,racetrack_length / 2.0f,0},{-disc_radius / 2.0f ,0,0}, {0,-disc_radius / 2.0f,0}, 
+			{disc_radius / 2.0 + 0,0,0}, {disc_radius / 2.0f ,racetrack_length / 2.0f,0}, {disc_radius / 2.0f ,racetrack_length / 2.0f,0} };
+		buffer<float> key_times = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f + 3*i, 17.0f };
 		tabTrajectoire[i] = Trajectoire("test", key_positions, key_times, interpolation, 11);
 		tabKart[i] = Kart("kartLuigi", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(0, (float) i / (float) nTraj, 1.0));
 	}
@@ -93,6 +98,7 @@ void scene_structure::update_camera()
 	// The camera moves forward all the time
 	//   We consider in this example a constant velocity, so the displacement is: velocity * dt * front-camera-vector
 	float const dt = timer.update();
+	update_camera_actif = true;
 	//vec3 const forward_displacement = 0;
 	//camera.position_camera += forward_displacement;
 	// camera.position_camera += (dt, dt, dt);
@@ -102,20 +108,25 @@ void scene_structure::update_camera()
 	vec3 p = interpolation(avancementKart, keyframe.key_positions, keyframe.key_times);
 	vec3 p_prec = interpolation(avancementKart - 0.001, keyframe.key_positions, keyframe.key_times);
 	vec3 posCamera =p -  (p-p_prec) / norm(p - p_prec) * 8 + vec3(-0.5,0,3);
-	if (inputs.keyboard.shift )
-	{
-		posCamera =  vec3(-0.5, 0, 3);
-		environment.camera.look_at(vec3(0,0,0), p);
-	}
-	else
-	{
-		vec3 regardCamera = p + vec3(0, 0, 2.0);
-		environment.camera.look_at(posCamera, regardCamera);
-	}
+	vec3 regardCamera = p + vec3(0, 0, 2.0);
+	environment.camera.look_at(posCamera, regardCamera);
+}
+void scene_structure::update_cameraArriere()
+{
+
+
+	vec3 p = interpolation(avancementKart, keyframe.key_positions, keyframe.key_times);
+	vec3 p_prec = interpolation(avancementKart - 0.001, keyframe.key_positions, keyframe.key_times);
+	vec3 posCamera = p + (p - p_prec) / norm(p - p_prec) * 8 + vec3(-0.5, 0, 3);
+	vec3 regardCamera = p + vec3(0, 0, 2.0);
+	environment.camera.look_at(posCamera, regardCamera);
 }
 
-
-
+void scene_structure::update_cameraPresentation()
+{
+	vec3 posCameraPres = tCamera.positionKart();
+	environment.camera.look_at(posCameraPres, { disc_radius / (2.0),racetrack_length / 2.0f ,0 });
+}
 void scene_structure::display()
 {
 	// Basic elements of the scene
@@ -152,7 +163,7 @@ void scene_structure::display()
 	//vec3 p_p = derivee_hermite(t, keyframe.key_positions, keyframe.key_times,key_derivee);
 	if (keyboard.up)
 	{
-		avancementKart += 0.06;
+		avancementKart += 0.03;
 	}
 	if (keyboard.down)
 	{
@@ -164,15 +175,21 @@ void scene_structure::display()
 	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation,11);
 	kartMario->faireAvancerKartManuel(avancementKart, t1);
 	kartMario->kart.update_local_to_global_coordinates();
-	for(int i = 0;i<nTraj;i++)
+	if (update_camera_actif)
 	{
-		tabKart[i].faireAvancerKart(t, tabTrajectoire[i]);
+		for (int i = 0; i < nTraj; i++)
+		{
+			tabKart[i].faireAvancerKart(t, tabTrajectoire[i]);
 
-		tabKart[i].kart.update_local_to_global_coordinates();
+			tabKart[i].kart.update_local_to_global_coordinates();
 
-		draw(tabKart[i].kart, environment);
+			draw(tabKart[i].kart, environment);
+		}
 	}
-	
+	else
+	{
+		tabTrajectoire[0].timer.t = tabTrajectoire[0].timer.t_min;
+	}
 	draw(kartMario->kart, environment);
 	//draw(kartLuigi, environment);
 	

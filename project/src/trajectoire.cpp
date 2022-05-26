@@ -7,8 +7,17 @@ Trajectoire::Trajectoire(const char* _nomTrajectoire, buffer<vec3> _key_position
 	key_positions = _key_positions;
 	key_times = _key_times;
 	fonctionInterpolation = _fonctionInterpolation;
+	int N = key_times.size();
+	timer.t_min = key_times[1];
+	timer.t_max = key_times[N - 2];
+	timer.t = timer.t_min;
 }
-vec3 Trajectoire::positionKart(float t)
+vec3 Trajectoire::positionKart()
 {
-	return fonctionInterpolation(t, key_positions,key_times);
+	timer.update();
+	//std::cout << timer.t << std::endl;
+	return fonctionInterpolation(timer.t, key_positions,key_times);
+}vec3 Trajectoire::positionKartPrec()
+{
+	return fonctionInterpolation(timer.t - 0.001, key_positions,key_times);
 }
