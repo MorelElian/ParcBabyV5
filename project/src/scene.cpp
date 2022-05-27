@@ -121,7 +121,7 @@ void scene_structure::display()
 
 	racetrack.update_local_to_global_coordinates();
 	draw(racetrack, environment);
-	//draw(rollercoaster, environment);
+	draw(rollercoaster, environment);
 	
 	// Update the current time
 	timer.update();

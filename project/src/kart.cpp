@@ -60,7 +60,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	discRoueAvtG.initialize(mesh_primitive_disc(hauteur_kart * 0.7, vec3(0, 0, 0), vec3(0, 1, 0)), "discRoueAvtG");
 	discRoueAvtG.texture = opengl_load_texture_image("assets/jenteBis.png", GL_REPEAT, GL_REPEAT);
 
-	//Ajout des pieces aerodynamiques sur les côtés du kart (1/2 pyramides)
+	//Ajout des pieces aerodynamiques sur les cï¿½tï¿½s du kart (1/2 pyramides)
 	sideKartD.initialize(mesh_primitive_sideKart(longueur_kart / 2.0f, 0.4f * largeur_kart, 0.8f * hauteur_kart), "sideKartD");
 	sideKartD.shading.color = color2;
 	sideKartG.initialize(mesh_primitive_sideKart(longueur_kart / 2.0f, 0.4f * largeur_kart, 0.8f * hauteur_kart), "sideKartG");
@@ -84,7 +84,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	lienCentreToreVolant.shading.color = { 0.0, 0.0, 0.0 };
 	lienCentreToreVolant2.shading.color = { 0.0, 0.0, 0.0 };
 	lienCentreToreVolant3.shading.color = { 0.0, 0.0, 0.0 };
-	//Ajout des turbos arrières
+	//Ajout des turbos arriï¿½res
 	plaqueTurbo.initialize(mesh_primitive_parapede(0.15 * longueur_kart, 0.7 * largeur_kart, 0.4 * hauteur_kart), "plaqueTurbo");
 	plaqueTurbo.shading.color = { 0.3,0.3,0.3 };
 	porteTurbo1.initialize(mesh_primitive_cylinder(0.1 * largeur_kart, vec3(0, 0, 0), vec3(0, 0, 0.3 * largeur_kart)), "porteTurbo1");
@@ -169,7 +169,6 @@ void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 {
 	float t_max = traj.key_times[traj.nPoints-2];
 	float t_min = traj.key_times[1];
-	std::cout << find_index_of_interval(t_min + 0.01, traj.key_times) << std::endl;
 	if (avancement > t_max - 0.01)
 	{
 		avancement = t_min + 0.011;
@@ -287,7 +286,7 @@ hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, flo
 	discRoueAvtG.initialize(mesh_primitive_disc(hauteur_kart * 0.7, vec3(0, 0, 0), vec3(0, 1, 0)), "discRoueAvtG");
 	discRoueAvtG.texture = opengl_load_texture_image("assets/jenteBis.png", GL_REPEAT, GL_REPEAT);
 
-	//Ajout des pieces aerodynamiques sur les côtés du kart (1/2 pyramides)
+	//Ajout des pieces aerodynamiques sur les cï¿½tï¿½s du kart (1/2 pyramides)
 	sideKartD.initialize(mesh_primitive_sideKart(longueur_kart / 2.0f, 0.4f * largeur_kart, 0.8f * hauteur_kart), "sideKartD");
 	sideKartD.shading.color = color2;
 	sideKartG.initialize(mesh_primitive_sideKart(longueur_kart / 2.0f, 0.4f * largeur_kart, 0.8f * hauteur_kart), "sideKartG");
@@ -311,7 +310,7 @@ hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, flo
 	lienCentreToreVolant.shading.color = { 0.0, 0.0, 0.0 };
 	lienCentreToreVolant2.shading.color = { 0.0, 0.0, 0.0 };
 	lienCentreToreVolant3.shading.color = { 0.0, 0.0, 0.0 };
-	//Ajout des turbos arrières
+	//Ajout des turbos arriï¿½res
 	plaqueTurbo.initialize(mesh_primitive_parapede(0.15 * longueur_kart, 0.7 * largeur_kart, 0.4 * hauteur_kart), "plaqueTurbo");
 	plaqueTurbo.shading.color = { 0.3,0.3,0.3 };
 	porteTurbo1.initialize(mesh_primitive_cylinder(0.1 * largeur_kart, vec3(0, 0, 0), vec3(0, 0, 0.3 * largeur_kart)), "porteTurbo1");
