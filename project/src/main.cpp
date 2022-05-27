@@ -61,7 +61,8 @@ int main(int, char* argv[])
 
 		// Call the display of the scene
 		timerBase.update();
-		if (timerBase.t < 15.0)
+
+		if (timerBase.t < 17.0 && camera)
 		{
 			scene.update_cameraPresentation();
 			

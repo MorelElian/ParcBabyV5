@@ -68,10 +68,10 @@ struct scene_structure {
 	cgp::buffer<cgp::vec3> key_positions;
 	cgp::buffer<cgp::vec3> key_derivee;
 	cgp::buffer<float> key_times2;
-	float avancementKart = 1.5;
+	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
 	Kart* tabKart;
-	int nTraj = 2;
+	int nTraj = 1;
 	Trajectoire *tabTrajectoire;
 	Trajectoire tCamera;
 	const char** tabNomTraj[3];

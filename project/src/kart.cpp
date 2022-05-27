@@ -10,14 +10,14 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	hauteur_kart = _hauteur_kart;
 	proportion = _proportion;
 	largeur_roue_arriere = 0.2 * proportion;
-	dimension_volant = 0.075 * largeur_kart;
+	dimension_volant = 0.275 * largeur_kart;
 	largeur_roue_avant = 0.15 * proportion;
 	longueur_kart *= proportion;
 	largeur_kart *= proportion;
 	hauteur_kart *= proportion;
 	baseKartTheorique.initialize(mesh_primitive_cube(vec3(0, 0, 0), 0.001),"baseKartTheorique");
 	baseKart.initialize(mesh_primitive_parapede(longueur_kart, largeur_kart, hauteur_kart), "baseKart");
-	baseKart.shading.color = { 0.8,0.8,0.8 };
+	baseKart.shading.color = color2;
 	//Element Proche de la base du kart
 
 	kartGauche.initialize(mesh_primitive_parapede(longueur_kart / 2.0, 0.4 * largeur_kart, 1.5 * hauteur_kart), "kartGauche");
@@ -25,7 +25,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	kartDroite.initialize(mesh_primitive_parapede(longueur_kart / 2.0, 0.4 * largeur_kart, 1.5 * hauteur_kart), "kartDroite");
 	kartDroite.shading.color = color1;
 	kartArriere.initialize(mesh_primitive_parapede(longueur_kart / 3.0, largeur_kart, 1.4 * hauteur_kart), "kartArriere");
-	kartArriere.shading.color = color2;
+	kartArriere.shading.color = color1;
 	kartAvant.initialize(mesh_primitive_parapede(largeur_roue_avant * 1.2, largeur_kart, hauteur_kart), "kartAvant");
 	kartAvant.shading.color = color1;
 	kartPupitre.initialize(mesh_primitive_sideKart(0.4 * longueur_kart, largeur_kart, 1.8 * hauteur_kart), "kartPupitre");
@@ -78,12 +78,12 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	lienCentreToreVolant.initialize(mesh_primitive_cylinder(dimension_volant * 0.4, vec3(0, 0, 0), vec3(0, 0, 2.5 * dimension_volant)), "lienCentreToreVolant");
 	lienCentreToreVolant2.initialize(mesh_primitive_cylinder(dimension_volant * 0.4, vec3(0, 0, 0), vec3(0, 0, 2.5 * dimension_volant)), "lienCentreToreVolant2");
 	lienCentreToreVolant3.initialize(mesh_primitive_cylinder(dimension_volant * 0.4, vec3(0, 0, 0), vec3(0, 0, 2.5 * dimension_volant)), "lienCentreToreVolant3");
-	porteVolant.shading.color = { 0.0, 0.0, 0.0 };
-	centreVolant.shading.color = { 0.0, 0.0, 0.0 };
-	toreVolant.shading.color = { 0.0, 0.0, 0.0 };
-	lienCentreToreVolant.shading.color = { 0.0, 0.0, 0.0 };
-	lienCentreToreVolant2.shading.color = { 0.0, 0.0, 0.0 };
-	lienCentreToreVolant3.shading.color = { 0.0, 0.0, 0.0 };
+	porteVolant.shading.color = { 0.5, 0.5, 0.5 };
+	centreVolant.shading.color = { 0.5, 0.5, 0.5 };
+	toreVolant.shading.color = { 0.5, 0.5, 0.5 };
+	lienCentreToreVolant.shading.color = { 0.5, 0.5, 0.5 };
+	lienCentreToreVolant2.shading.color = { 0.5, 0.5, 0.5 };
+	lienCentreToreVolant3.shading.color = { 0.5, 0.5, 0.5 };
 	//Ajout des turbos arrières
 	plaqueTurbo.initialize(mesh_primitive_parapede(0.15 * longueur_kart, 0.7 * largeur_kart, 0.4 * hauteur_kart), "plaqueTurbo");
 	plaqueTurbo.shading.color = { 0.3,0.3,0.3 };

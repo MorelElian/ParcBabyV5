@@ -1,8 +1,8 @@
 #include "trajectoire.hpp"
 
-Trajectoire::Trajectoire(const char* _nomTrajectoire, buffer<vec3> _key_positions, buffer<float> _key_times, std::function<vec3(float, buffer<vec3>, buffer<float>)> _fonctionInterpolation, int _nPoints)
+Trajectoire::Trajectoire(const char* _nomTrajectoire, buffer<vec3> _key_positions, buffer<float> _key_times, std::function<vec3(float, buffer<vec3>, buffer<float>)> _fonctionInterpolation)
 {
-	nPoints = _nPoints;
+	nPoints =_key_times.size();
 	nomTrajectoire = _nomTrajectoire;
 	key_positions = _key_positions;
 	key_times = _key_times;
