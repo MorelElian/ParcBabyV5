@@ -61,14 +61,21 @@ struct scene_structure {
 	void display();     // The frame display to be called within the animation loop
 	void display_gui(); // The display of the GUI, also called within the animation loop
 	void update_camera();
-	cgp::vec3 derivee_precedente = cgp::vec3(0, 1, 0);
+	void update_cameraArriere();
+	void update_cameraPresentation();
+	bool update_camera_actif = false;
 	cgp::buffer<float> key_times;
 	cgp::buffer<cgp::vec3> key_positions;
 	cgp::buffer<cgp::vec3> key_derivee;
 	cgp::buffer<float> key_times2;
-	float avancementKart = 1.5;
+	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
-	Kart* kartTest[3];
+	Kart* tabKart;
+	int nTraj = 1;
+	Trajectoire *tabTrajectoire;
+	Trajectoire tCamera;
+	const char** tabNomTraj[3];
+
 	//double avancement_update = 1.0;
 
 };

@@ -49,7 +49,7 @@ int main(int, char* argv[])
 	// ************************ //
 	std::cout<<"Start animation loop ..."<<std::endl;
 	bool camera = false;
-
+	cgp::timer_basic timerBase;
 	while (!glfwWindowShouldClose(window))
 	{
 		// Reset the screen for a new frame
@@ -60,17 +60,22 @@ int main(int, char* argv[])
 		scene.display_gui();
 
 		// Call the display of the scene
-		if (!scene.inputs.keyboard.shift)
+		timerBase.update();
+
+		if (timerBase.t < 17.0 && camera)
+		{
+			scene.update_cameraPresentation();
+			
+		}
+		else if (!scene.inputs.keyboard.shift)
 		{
 			//std::cout << "shift" << std::endl;
-			camera = -camera;
 			scene.update_camera();
 		}
-		/*if (camera)
+		else
 		{
-			scene.update_camera();
+			scene.update_cameraArriere();
 		}
-		*/
 		scene.display();
 		
 		// End of ImGui display and handle GLFW events
