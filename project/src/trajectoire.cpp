@@ -10,7 +10,34 @@ Trajectoire::Trajectoire(const char* _nomTrajectoire, buffer<vec3> _key_position
 	int N = key_times.size();
 	timer.t_min = key_times[1];
 	timer.t_max = key_times[N - 2];
-	timer.t = timer.t_min;
+	timer.t = timer.t_min + 0.02;
+	timer2.t_min = key_times[0];
+	timer2.t_max = key_times[N - 2];
+	timer2.t = timer2.t_min;
+	demarrage = false;
+}
+vec3 Trajectoire::positionKart(int deplacement)
+{
+	if ( deplacement == 2)
+	{
+		
+		std::cout << timer.t << std::endl;
+		std::cout << "hello" << std::endl;
+		timer.update();
+		std::cout << timer.t << std::endl;
+	}
+	else if (deplacement ==1)
+	{
+		//std::cout << " test" << std::endl;
+		timer.start();
+		timer.update();
+		std::cout << timer.t << std::endl;
+	}
+	//std::cout << timer.t << std::endl;
+		return fonctionInterpolation(timer.t, key_positions, key_times);
+
+	
+	//std::cout << timer.t << std::endl;
 }
 vec3 Trajectoire::positionKart()
 {

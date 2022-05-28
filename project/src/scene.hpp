@@ -44,7 +44,7 @@ struct scene_structure {
 	keyframe_structure keyframe;
 
 	// Timer used for the interpolation of the position
-	cgp::timer_interval timer;
+	cgp::timer_basic timer;
 
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
@@ -65,13 +65,15 @@ struct scene_structure {
 	void update_cameraPresentation();
 	bool update_camera_actif = false;
 	cgp::buffer<float> key_times;
+	cgp::buffer<float> key_times_mario;
 	cgp::buffer<cgp::vec3> key_positions;
+	cgp::buffer<cgp::vec3> key_positions_mario;
 	cgp::buffer<cgp::vec3> key_derivee;
 	cgp::buffer<float> key_times2;
 	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
 	Kart* tabKart;
-	int nTraj = 1;
+	int nTraj = 3;
 	Trajectoire *tabTrajectoire;
 	Trajectoire tCamera;
 	const char** tabNomTraj[3];

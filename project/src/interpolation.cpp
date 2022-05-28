@@ -13,7 +13,9 @@ vec3 interpolation(float t, buffer<vec3> const& key_positions, buffer<float> con
 	int idx = find_index_of_interval(t, key_times);
 	if (idx <= 0)
 	{
-		return vec3(0,0,0);
+		std::cout << t << std::endl;
+		std::cout << "pb" <<std::endl;
+		idx = 1;
 	}
 	//std::cout << t << std::endl;
 	// Get parameters (time and position) used to compute the linear interpolation
