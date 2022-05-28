@@ -7,9 +7,9 @@ using namespace cgp;
 
 float pi = 3.141592653589793;
 
-float disc_radius = 20;
-float turn_radius = 4;
-float racetrack_length = 60;
+float disc_radius = 32;
+float turn_radius = 6;
+float racetrack_length = 80;
 float racetrack_thickness = 0.5;
 
 float barrier_height = 0.6;
