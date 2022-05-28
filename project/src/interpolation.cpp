@@ -8,13 +8,14 @@ using namespace cgp;
 * - Assume t \in [ intervals[0], intervals[N-1] [       */
 vec3 interpolation(float t, buffer<vec3> const& key_positions, buffer<float> const& key_times)
 {
+	std::cout << "a" << std::endl;
 	// Find idx such that key_times[idx] < t < key_times[idx+1]
 	int idx = find_index_of_interval(t, key_times);
-	if (idx < 0)
+	if (idx <= 0)
 	{
 		return vec3(0,0,0);
 	}
-	//std::cout << idx << std::endl;
+	//std::cout << t << std::endl;
 	// Get parameters (time and position) used to compute the linear interpolation
 	//   (You will need to get more parameters for the spline interpolation)
 	float t0 = key_times[idx - 1];
@@ -126,7 +127,6 @@ int find_index_of_interval(float t, buffer<float> const& intervals)
 {
 	int const N = intervals.size();
 	bool error = false;
-
 	if (intervals.size() < 2) {
 		std::cout << "Error: Intervals should have at least two values; current size=" << intervals.size() << std::endl;
 		error = true;

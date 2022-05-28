@@ -70,7 +70,7 @@ int main(int, char* argv[])
 		else if (!scene.inputs.keyboard.shift)
 		{
 			//std::cout << "shift" << std::endl;
-			scene.update_camera();
+			//scene.update_camera();
 		}
 		else
 		{

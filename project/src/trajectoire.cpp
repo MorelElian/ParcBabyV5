@@ -15,9 +15,21 @@ Trajectoire::Trajectoire(const char* _nomTrajectoire, buffer<vec3> _key_position
 vec3 Trajectoire::positionKart()
 {
 	timer.update();
-	//std::cout << timer.t << std::endl;
 	return fonctionInterpolation(timer.t, key_positions,key_times);
-}vec3 Trajectoire::positionKartPrec()
+}
+
+vec3 Trajectoire::positionKartPrec()
 {
 	return fonctionInterpolation(timer.t - 0.001, key_positions,key_times);
+}
+
+vec3 Trajectoire::positionWagon(float delta_t)
+{
+	timer.update();
+	return fonctionInterpolation(timer.t + delta_t, key_positions,key_times);
+}
+
+vec3 Trajectoire::positionWagonPrec(float delta_t)
+{
+	return fonctionInterpolation(timer.t + delta_t - 0.001, key_positions,key_times);
 }

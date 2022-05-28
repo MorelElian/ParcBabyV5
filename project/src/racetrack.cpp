@@ -7,9 +7,9 @@ using namespace cgp;
 
 float pi = 3.141592653589793;
 
-float disc_radius = 20;
+float disc_radius = 32;
 float turn_radius = 4;
-float racetrack_length = 60;
+float racetrack_length = 80;
 float racetrack_thickness = 0.5;
 
 float barrier_height = 0.6;
@@ -22,7 +22,7 @@ float departure_thickness = 0.7;
 float departure_radius = 2;
 float sign_height = departure_height;
 
-float tube_height = 8;
+float tube_height = 12;
 float tube_thickness = 1;
 float arc_thickness = 0.5;
 
@@ -523,30 +523,4 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	racetrack.add(racetrack_pilar,"racetrack_pivot1");
 
     return racetrack;
-}
-
-vec3 start = {disc_radius/2.0f,racetrack_length/2.0f,0};
-buffer<vec3> key_positions = { start, {disc_radius/2.0f,racetrack_length/2.0f,0}, {disc_radius/2.0f,racetrack_length,0}, {0,racetrack_length + disc_radius/2.0f,0}, {-disc_radius/2.0f,racetrack_length,0}, {-disc_radius/2.0f,racetrack_length/2.0f,0}, {-disc_radius/2.0f,0,0}, {0,-disc_radius/2.0f,0}, {disc_radius/2,0,0}, {disc_radius/2.0f,racetrack_length/2.0f,0}, start, start};
-buffer<float> key_steps = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f };
-
-cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
-    cgp::mesh_drawable rollercoaster;
-	float rc_thickness = 0.5;
-    float dt = 0.01;
-	float t = key_steps[1] + dt;
-	float tf = key_steps[key_steps.size() - 3];
-
-	// std::cout << t << std::endl;
-	// std::cout << interpolation(t, key_positions, key_steps) << std::endl;
-	// std::cout << interpolation(t+dt, key_positions, key_steps) << std::endl;
-	mesh rc = mesh_primitive_cylinder(rc_thickness, interpolation(t, key_positions, key_steps), interpolation(t+dt, key_positions, key_steps));
-
-    while (t < tf){
-        vec3 center = interpolation(t, key_positions, key_steps);
-		t += dt;
-		vec3 center2 = interpolation(t, key_positions, key_steps);
-		rc.push_back(mesh_primitive_cylinder(rc_thickness, center, center2));
-    }
-	rollercoaster.initialize(rc, "rollercoaster");
-	return rollercoaster;
 }
