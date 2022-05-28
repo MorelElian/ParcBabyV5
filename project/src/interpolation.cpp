@@ -8,7 +8,7 @@ using namespace cgp;
 * - Assume t \in [ intervals[0], intervals[N-1] [       */
 vec3 interpolation(float t, buffer<vec3> const& key_positions, buffer<float> const& key_times)
 {
-	std::cout << "a" << std::endl;
+	//std::cout << "a" << std::endl;
 	// Find idx such that key_times[idx] < t < key_times[idx+1]
 	int idx = find_index_of_interval(t, key_times);
 	if (idx <= 0)

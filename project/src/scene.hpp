@@ -12,6 +12,7 @@
 #include "kart.h"
 #include "trajectoire.hpp"
 #include "rollercoaster.hpp"
+
 #include <list>
 
 // The element of the GUI that are not already stored in other structures
