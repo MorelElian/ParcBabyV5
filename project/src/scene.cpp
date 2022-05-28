@@ -79,7 +79,6 @@ void scene_structure::initialize()
 	tabTrajectoire[0] = Trajectoire("TrajLuigi", key_positions, key_times, interpolation);
 	tabKart[0] = Kart("kartLuigi", "assets/personnages/sigleLuigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(1, 1, 1.0));
 
-<<<<<<< Updated upstream
 	key_positions = { { 3.0 * disc_radius / 4.0 ,-disc_radius / 2.0,0 },
 		{ disc_radius * 2.0 / 3.0f,racetrack_length / 3.0f,0},
 		{disc_radius * 2.0 / 3.0f, 2.0 * racetrack_length / 3.0 ,0},
@@ -128,14 +127,6 @@ void scene_structure::initialize()
 	tabTrajectoire[2] = Trajectoire("TrajWaluigi", key_positions, key_times, interpolation);
 	tabKart[2] = Kart("kartPeach", "assets/personnages/siglePeach.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.4, 1.0), vec3(1, 1, 0.0));
 	key_times2 = { 0.0f, 1.0f, 3.0f, 5.0f, 7.0f, 9.0f, 11.0f, 13.0f, 15.0f, 17.0f, 18.0f };
-=======
-	key_positions = { { 2.0 /3.0 *disc_radius ,racetrack_length / 3.0f, 0}, { disc_radius * 2.0 / 3.0f,racetrack_length / 3.0f,0}, {disc_radius * 2.0 / 3.0f, 2.0 * racetrack_length / 3.0 ,0}, {2.0 * disc_radius / 3.0, racetrack_length + disc_radius / 2.0f ,0},
-		{ 0 ,racetrack_length + 4.0 * disc_radius / 5.0f ,0 } ,{ -2.0 * disc_radius / 3.0f ,racetrack_length + disc_radius/ 2.0f ,0 }, { -3.0 * disc_radius / 4.0f,2.0 * racetrack_length / 3.0f,0 }, { -3.0 * disc_radius / 4.0f ,racetrack_length / 3.0,0 }, { - 2.0 * disc_radius /3.0,-disc_radius / 3.0f,0 },
-		{ 0 ,- 3.0 /4.0 * disc_radius,0 } ,{ 3.0 * disc_radius / 4.0 ,-disc_radius / 2.0,0 }, { 2.0 * disc_radius / 3.0f ,racetrack_length / 3.0f,0 }, { 2.0 * disc_radius / 3.0f ,racetrack_length / 3.0f,0 }};
-	key_times = { 0.0f, 1.0f, 2.0f, 4.0f, 6.0f, 8.0f, 10.0f, 12.0f, 14.0f, 16.0f, 17.0f,19.0f,21.0f};
-	std::cout << key_positions.size() << std::endl;
-	key_times2 = { 0.0f, 1.0f, 3.0f, 5.0f, 7.0f, 9.0f, 11.0f, 13.0f, 15.0f, 17.0f, 19.0f };
->>>>>>> Stashed changes
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
 	kartLuigi = create_kart(1.2,0.4,0.15,10.0,vec3(0.0,0.0,1.0),vec3(1.0,1.0,0.0),"assets/sigleMario.png");
 
@@ -145,17 +136,9 @@ void scene_structure::initialize()
 	keyframe.initialize(key_positions, key_times);
 
 	int N = key_times.size();
-	/*timer.t_min = key_times[1];
+	timer.t_min = key_times[1];
 	timer.t_max = key_times[N - 2];
-<<<<<<< Updated upstream
-	timer.t = timer.t_min;*/
-
-
-	
-	timer.start();
-=======
 	timer.t = timer.t_min;
->>>>>>> Stashed changes
 	//int idx = find_index_of_interval(2.0, key_times);
 }
 
@@ -245,10 +228,6 @@ void scene_structure::display()
 	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation);
 	kartMario->faireAvancerKartManuel(avancementKart, t1);
 	kartMario->kart.update_local_to_global_coordinates();
-<<<<<<< Updated upstream
-	int deplacement = 2;
-=======
->>>>>>> Stashed changes
 	if (update_camera_actif || true)
 	{
 		for (int i = 0; i < nTraj; i++)
@@ -263,13 +242,7 @@ void scene_structure::display()
 	draw(kartMario->kart, environment);
 	//draw(kartLuigi, environment);
 	
-<<<<<<< Updated upstream
 	//keyframe.display_current_position(interpolation(avancementKart, keyframe.key_positions, keyframe.key_times), environment);
-
-
-=======
-	keyframe.display_current_position(interpolation(avancementKart, keyframe.key_positions, keyframe.key_times), environment);
->>>>>>> Stashed changes
 	
 }
 
