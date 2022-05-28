@@ -48,7 +48,7 @@ int main(int, char* argv[])
 	//     Animation Loop
 	// ************************ //
 	std::cout<<"Start animation loop ..."<<std::endl;
-	bool camera = true;
+	bool camera = false;
 	cgp::timer_basic timerBase;
 	while (!glfwWindowShouldClose(window))
 	{
@@ -70,7 +70,7 @@ int main(int, char* argv[])
 		else if (!scene.inputs.keyboard.shift)
 		{
 			//std::cout << "shift" << std::endl;
-			//scene.update_camera();
+			scene.update_camera();
 		}
 		else
 		{

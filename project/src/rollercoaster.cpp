@@ -81,11 +81,10 @@ cgp::hierarchy_mesh_drawable Wagon::create_wagon_mesh_drawable(){
     return wagon;
 }
 
-void Wagon::faireAvancerWagon(float delta_t)
+void Wagon::faireAvancerWagon(float delta)
 {
-	vec3 p = traj.positionWagon(delta_t);
-    //std::cout << "a" << std::endl;
-	vec3 p_prec = traj.positionWagonPrec(delta_t);
+	vec3 p = traj.positionWagon(delta);
+	vec3 p_prec = traj.positionWagonPrec(delta);
 	//std::cout << "a" << std::endl;
     wagon["wagon"].transform.translation = p;
 	wagon["wagon"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
@@ -105,6 +104,11 @@ Train::Train(int _nb_wagon, Trajectoire traj){
     }
 }
 
-// Train::faireAvancerTrain(){
-    
-// }
+float delta = 0.2f;
+
+void Train::faireAvancerTrain(){
+    for(int i = 0; i < nb_wagon; i++){
+        train[i].faireAvancerWagon(delta*i);
+        train[i].wagon.update_local_to_global_coordinates();
+    }
+}

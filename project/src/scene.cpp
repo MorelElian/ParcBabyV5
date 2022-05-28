@@ -52,8 +52,8 @@ void scene_structure::initialize()
 	
 	buffer<vec3> extern key_positions_rc;
 	buffer<float> extern key_steps;
-	traj_wagon = Trajectoire("wagon", key_positions_rc, key_steps, interpolation);
-	wagon = new Wagon(traj_wagon);
+	traj_wagon = Trajectoire("train", key_positions_rc, key_steps, interpolation);
+	train = new Train(3, traj_wagon);
 	
 	buffer<vec3> key_positions_cam = { {disc_radius / (2.0),racetrack_length / 2.0f ,10},{ 5.0 * disc_radius, -racetrack_length / 2.0f ,7}, { 5.0 * disc_radius ,racetrack_length / 2.0f,5}, {3 * disc_radius ,racetrack_length ,5}, {0,racetrack_length + disc_radius / 2.0f ,6},{-disc_radius,racetrack_length + disc_radius / 2.0f ,4}
 	,{-disc_radius / (1.4),- racetrack_length / 2.0f ,6} ,{disc_radius ,racetrack_length / 2.8f ,5},{disc_radius / (2.0),racetrack_length / 2.8f ,10} ,{disc_radius / (2.0),racetrack_length / 2.0f ,10} };
@@ -136,9 +136,9 @@ void scene_structure::initialize()
 	keyframe.initialize(key_positions, key_times);
 
 	int N = key_times.size();
-	timer.t_min = key_times[1];
-	timer.t_max = key_times[N - 2];
-	timer.t = timer.t_min;
+	// timer.t_min = key_times[1];
+	// timer.t_max = key_times[N - 2];
+	// timer.t = timer.t_min;
 	//int idx = find_index_of_interval(2.0, key_times);
 }
 
@@ -201,9 +201,12 @@ void scene_structure::display()
 	// Update the current time
 	timer.update();
 
-	wagon->faireAvancerWagon(t);
-	wagon->wagon.update_local_to_global_coordinates();
-	draw(wagon->wagon, environment);
+	train->faireAvancerTrain();
+	for(int i = 0; i < train->nb_wagon; i++){
+		//std::cout << typeid(train[i]) << endl;
+		draw(train[i].wagon, environment);
+	}
+	
 
 	// clear trajectory when the timer restart
 	//if (t < timer.t_min + 0.1f)

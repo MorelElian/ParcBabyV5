@@ -18,7 +18,7 @@ class Wagon
         Trajectoire traj;
 
         cgp::hierarchy_mesh_drawable create_wagon_mesh_drawable();
-        void faireAvancerWagon(float delta_t);
+        void faireAvancerWagon(float delta);
 };
 
 
@@ -27,4 +27,5 @@ class Train{
         Train(int _nb_wagon, Trajectoire trajectoire);
         int nb_wagon;
         Wagon* train;
+        void faireAvancerTrain();
 };

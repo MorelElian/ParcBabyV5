@@ -45,14 +45,15 @@ struct scene_structure {
 	keyframe_structure keyframe;
 
 	// Timer used for the interpolation of the position
-	cgp::timer_basic timer;
+	cgp::timer_interval timer;
 
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
 	Kart* kartMario;
 	cgp::hierarchy_mesh_drawable kartLuigi;
 	cgp::mesh_drawable rollercoaster;
-	Wagon* wagon;
+	
+	Train* train;
 	Trajectoire traj_wagon;
 
 

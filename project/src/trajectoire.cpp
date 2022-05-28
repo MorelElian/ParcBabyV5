@@ -50,13 +50,13 @@ vec3 Trajectoire::positionKartPrec()
 	return fonctionInterpolation(timer.t - 0.001, key_positions,key_times);
 }
 
-vec3 Trajectoire::positionWagon(float delta_t)
+vec3 Trajectoire::positionWagon(float delta)
 {
 	timer.update();
-	return fonctionInterpolation(timer.t + delta_t, key_positions,key_times);
+	return fonctionInterpolation(timer.t + delta, key_positions,key_times);
 }
 
-vec3 Trajectoire::positionWagonPrec(float delta_t)
+vec3 Trajectoire::positionWagonPrec(float delta)
 {
-	return fonctionInterpolation(timer.t + delta_t - 0.001, key_positions,key_times);
+	return fonctionInterpolation(timer.t + delta - 0.001, key_positions,key_times);
 }
