@@ -1,5 +1,6 @@
 
 #include "scene.hpp"
+#include "trajectoireKart.hpp"
 #include <math.h>   
 #include <cmath>
 float extern pi;
@@ -63,72 +64,26 @@ void scene_structure::initialize()
 	//Initialisation trajectoires
 	tabTrajectoire = new Trajectoire[nTraj];
 	tabKart = new Kart[nTraj];
-
-	buffer<vec3> key_positions = { 
-		{disc_radius / 2.0 + 0,0,0},
-		{disc_radius / 2.0f,0.8 * racetrack_length / 2.0f,0},
-		{disc_radius / 2.0f,racetrack_length ,0},
-		{0,racetrack_length + disc_radius / 2.0f ,0},
-		{-disc_radius / 2.0f ,racetrack_length ,0}, 
-		{-disc_radius / 2.0f,racetrack_length / 2.0f,0},
-		{-disc_radius / 2.0f ,0,0}, {0,-disc_radius / 2.0f,0},
-		{disc_radius / 2.0 + 0,0,0}, 
-		{disc_radius / 2.0f ,0.8 * racetrack_length / 2.0f,0},
-		{disc_radius / 2.0f,racetrack_length ,0} };
+	buffer<vec3> key_positions_luigi = trajLuigi();
 	buffer<float> key_times = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.5f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f };
-	tabTrajectoire[0] = Trajectoire("TrajLuigi", key_positions, key_times, interpolation);
+	tabTrajectoire[0] = Trajectoire("TrajLuigi", key_positions_luigi, key_times, interpolation);
 	tabKart[0] = Kart("kartLuigi", "assets/personnages/sigleLuigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(1, 1, 1.0));
 
-	key_positions = { { 3.0 * disc_radius / 4.0 ,-disc_radius / 2.0,0 },
-		{ disc_radius * 2.0 / 3.0f,racetrack_length / 3.0f,0},
-		{disc_radius * 2.0 / 3.0f, 2.0 * racetrack_length / 3.0 ,0},
-		{2.0 * disc_radius / 3.0, racetrack_length + disc_radius / 2.0f ,0},
-		{ 0 ,racetrack_length + 3.0 * disc_radius / 4.0f ,0 },
-		{ -2.0 * disc_radius / 3.0f ,racetrack_length + disc_radius/ 3.0f ,0 },
-		{ -3.0 * disc_radius / 4.0f ,racetrack_length / 3.0,0 },
-		{ - 2.0 * disc_radius /3.0,-disc_radius / 3.0f,0 },
-		{ 0 ,- 3.0 /4.0 * disc_radius,0 },
-		{ 3.0 * disc_radius / 4.0 ,-disc_radius / 2.0,0 },
-		{ 2.0 * disc_radius / 3.0f ,racetrack_length / 3.0f,0 },
-		{disc_radius * 2.0 / 3.0f, 2.0 * racetrack_length / 3.0 ,0} };
+	key_positions = trajWaluigi();
 	key_times = { 0.0f, 1.0f, 1.6f, 2.4f, 3.2f, 4.0f, 4.6f, 6.0f, 6.8f, 7.6f,9.0f,10.0f};
 	tabTrajectoire[1] = Trajectoire("TrajWaluigi", key_positions, key_times, interpolation);
 	tabKart[1] = Kart("kartWaluigi", "assets/personnages/sigleWaluigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.4, 0.0, 0.8), vec3(1, 1, 0.0));
-	key_positions_mario = { 
-		{ disc_radius / 4.0 ,0,0 },
-		{ disc_radius * 1.0 / 3.0f,racetrack_length / 4.0f,0},
-		{turn_radius * 2.5, 4.0 * racetrack_length / 5.0 ,0},
-		{ - turn_radius * 0.6, racetrack_length + disc_radius/2.0 ,0} ,
-		{-4.0 * disc_radius/5.0, racetrack_length + disc_radius /4.0  ,0},
-		{ - 1.0/3.0 * disc_radius ,0.5* racetrack_length ,0},
-		{ -4.0 * disc_radius / 5.0f , -disc_radius/8.0  ,0 },
-		{ -2.0 * disc_radius / 3.0f ,- disc_radius * 0.6,0 },
-		{ 0,-disc_radius * 0.4,0 },
-		{ disc_radius / 4.0 ,0,0 },
-		{ 1.0 * disc_radius / 3.0 ,racetrack_length / 4.0,0 },
-		{turn_radius * 2.5, 4.0 * racetrack_length / 5.0 ,0}, };
+	key_positions_mario = trajMario();
 	std::cout << key_positions_mario.size() << std::endl;
 	key_times_mario = { 0.0f, 1.0f, 1.8f, 2.7f, 4.0f, 5.0f, 6.0f, 7.0f, 8.4f, 8.8f,9.0f,10.0f};
 
 
-	key_positions = { {3.0 * disc_radius / 4.0,0,0},
-		{ 3.0 / 4.0 * disc_radius ,racetrack_length / 5.0f, 0},
-		{disc_radius * 3.0 / 4.0f, 3.0 *racetrack_length / 5.0 ,0},
-		{2.0 * disc_radius / 3.0, racetrack_length +turn_radius ,0},
-		{ 0 ,racetrack_length + turn_radius * 1.5,0 },
-		{ -2.0 * turn_radius,racetrack_length - turn_radius,0 },
-		{ - disc_radius / 2.0f ,racetrack_length / 2.0,0 },
-		{ -3.0 * disc_radius / 4.0,0,0 },
-		{ 0 ,-3.0 * disc_radius / 4.0,0} ,
-		{3.0 * disc_radius / 4.0,0,0},
-		{3.0 * disc_radius / 4.0f ,racetrack_length / 5.0f,0},
-		{3.0 * disc_radius / 4.0f ,3.0 * racetrack_length / 5.0f,0}};
+	key_positions = trajPeach();
 	key_times = { 0.0f, 1.0f, 1.6f, 2.4f, 3.2f, 4.0f, 4.6f, 6.0f, 6.8f, 7.6f,9.0f,10.0f};
 	tabTrajectoire[2] = Trajectoire("TrajWaluigi", key_positions, key_times, interpolation);
 	tabKart[2] = Kart("kartPeach", "assets/personnages/siglePeach.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.4, 1.0), vec3(1, 1, 0.0));
-	key_times2 = { 0.0f, 1.0f, 3.0f, 5.0f, 7.0f, 9.0f, 11.0f, 13.0f, 15.0f, 17.0f, 18.0f };
+
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
-	kartLuigi = create_kart(1.2,0.4,0.15,10.0,vec3(0.0,0.0,1.0),vec3(1.0,1.0,0.0),"assets/sigleMario.png");
 
 	// Key 3D positions
 
@@ -200,8 +155,8 @@ void scene_structure::display()
 	
 	// Update the current time
 	timer.update();
-
-	wagon->faireAvancerWagon(t);
+	float t = timer.t;
+	//wagon->faireAvancerWagon(t);
 	wagon->wagon.update_local_to_global_coordinates();
 	draw(wagon->wagon, environment);
 
@@ -223,16 +178,16 @@ void scene_structure::display()
 		avancementKart -= 0.03;
 	}
 	
-	kartLuigi.update_local_to_global_coordinates();
 	Trajectoire t1("t1",key_positions_mario,key_times_mario, interpolation);
-	Trajectoire t2("t2", keyframe.key_positions, key_times2, interpolation);
+	std::cout << "test" << std::endl;
 	kartMario->faireAvancerKartManuel(avancementKart, t1);
 	kartMario->kart.update_local_to_global_coordinates();
 	if (update_camera_actif || true)
 	{
 		for (int i = 0; i < nTraj; i++)
 		{
-			
+
+			std::cout << "test" << std::endl;
 			tabKart[i].faireAvancerKartManuel(avancementKart, tabTrajectoire[i]);
 			tabKart[i].kart.update_local_to_global_coordinates();
 

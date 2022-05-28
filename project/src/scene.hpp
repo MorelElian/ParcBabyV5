@@ -12,6 +12,7 @@
 #include "kart.h"
 #include "trajectoire.hpp"
 #include "rollercoaster.hpp"
+
 #include <list>
 
 // The element of the GUI that are not already stored in other structures
@@ -45,7 +46,7 @@ struct scene_structure {
 	keyframe_structure keyframe;
 
 	// Timer used for the interpolation of the position
-	cgp::timer_basic timer;
+	cgp::timer_interval timer;
 
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
