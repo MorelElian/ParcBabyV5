@@ -11,6 +11,7 @@
 #include "interpolation.h"
 #include "kart.h"
 #include "trajectoire.hpp"
+#include "rollercoaster.hpp"
 #include <list>
 
 // The element of the GUI that are not already stored in other structures
@@ -51,6 +52,9 @@ struct scene_structure {
 	Kart* kartMario;
 	cgp::hierarchy_mesh_drawable kartLuigi;
 	cgp::mesh_drawable rollercoaster;
+	Wagon* wagon;
+	Trajectoire traj_wagon;
+
 
 
 	// ****************************** //
