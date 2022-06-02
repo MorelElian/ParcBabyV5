@@ -22,7 +22,10 @@ float evaluate_terrain_height(float x, float y)
     vec2 m8 = {terrain_length/2.0f, 0};
 
     vec2 p_i[8] = { m1, m2, m3, m4, m5, m6, m7, m8 };
-    float h_i[8] = { 30.0f, 30.0f, 30.0f, 30.0f, 30.0f, 30.0f, 30.0f, 30.0f };
+
+    float H = 50.0f;
+    float h_i[8] = { H, H, H, H, H, H, H, H };
+
     float sigma_i[8] = { terrain_length/5.0f, terrain_length/5.0f, terrain_length/5.0f,terrain_length/5.0f, terrain_length/5.0f, terrain_length/5.0f,terrain_length/5.0f,terrain_length/5.0f };
     float S = 0;
     for (int i = 0; i < Nm; i++)
@@ -32,7 +35,7 @@ float evaluate_terrain_height(float x, float y)
         float z = h_i[i] * std::exp(-d * d);
         S += z;
     }
-    S += noise_perlin(vec2(x/terrain_length + 0.5f, y/terrain_length + 0.5f), 10, 1.0f, 1.3f);
+    S += noise_perlin(vec2(x/terrain_length + 0.5f, y/terrain_length + 0.5f), 10, 1.0f, 1.4f);
     return S;
 }
 
