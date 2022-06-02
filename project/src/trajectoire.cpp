@@ -53,10 +53,19 @@ vec3 Trajectoire::positionKartPrec()
 vec3 Trajectoire::positionWagon(float delta)
 {
 	timer.update();
-	return fonctionInterpolation(timer.t + delta, key_positions,key_times);
+	//std::cout << timer.t + delta << std::endl;
+	float T = timer.t + delta;
+	if (T > timer.t_max){
+		T = T - (timer.t_max-timer.t_min);
+	}
+	return fonctionInterpolation(T, key_positions,key_times);
 }
 
 vec3 Trajectoire::positionWagonPrec(float delta)
-{
-	return fonctionInterpolation(timer.t + delta - 0.001, key_positions,key_times);
+{	
+	float T = timer.t + delta - 0.0001;
+	if (T > timer.t_max){
+		T = T - (timer.t_max-timer.t_min);
+	}
+	return fonctionInterpolation(T, key_positions,key_times);
 }

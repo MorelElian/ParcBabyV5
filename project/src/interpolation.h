@@ -10,4 +10,3 @@ vec3 position_hermite(float t, float tAvant, float tApres, vec3 const& pAvant, v
 vec3 interpolation_hermite(float t, buffer<vec3> const& key_positions, buffer<float> const& key_times, buffer<vec3> const& key_derivee);
 vec3 derivee_hermite(float t, buffer<vec3> const& key_positions, buffer<float> const& key_times, buffer<vec3> const& key_derivee);
 
-

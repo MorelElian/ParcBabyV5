@@ -44,17 +44,19 @@ void scene_structure::initialize()
 	//environment.camera.position_camera = { disc_radius/2.0, 0.6 * racetrack_length/2.0, 5.0f };
 	//environment.camera.manipulator_rotate_roll_pitch_yaw(-Pi/2.0, Pi/2.0, Pi/2.0);
 	
-	// mesh const terrain_mesh = create_terrain_mesh();
-	// terrain.initialize(terrain_mesh, "terrain");
-	// terrain.shading.color = { 0.6f,0.85f,0.5f };
+	mesh const terrain_mesh = create_terrain_mesh();
+	terrain.initialize(terrain_mesh, "terrain");
+	terrain.shading.color = { 0.6f,0.85f,0.5f };
+	
 	skybox.initialize("assets/Gu_RainbowRoad/","skybox");
+	
 	racetrack = create_racetrack_mesh_drawable();
-	//rollercoaster = create_rollercoaster_mesh_drawable();
+	rollercoaster = create_rollercoaster_mesh_drawable();
 	
 	buffer<vec3> extern key_positions_rc;
 	buffer<float> extern key_steps;
 	traj_wagon = Trajectoire("train", key_positions_rc, key_steps, interpolation);
-	train = new Train(3, traj_wagon);
+	train = new Train(10, traj_wagon);
 	
 	buffer<vec3> key_positions_cam = { {disc_radius / (2.0),racetrack_length / 2.0f ,10},{ 5.0 * disc_radius, -racetrack_length / 2.0f ,7}, { 5.0 * disc_radius ,racetrack_length / 2.0f,5}, {3 * disc_radius ,racetrack_length ,5}, {0,racetrack_length + disc_radius / 2.0f ,6},{-disc_radius,racetrack_length + disc_radius / 2.0f ,4}
 	,{-disc_radius / (1.4),- racetrack_length / 2.0f ,6} ,{disc_radius ,racetrack_length / 2.8f ,5},{disc_radius / (2.0),racetrack_length / 2.8f ,10} ,{disc_radius / (2.0),racetrack_length / 2.0f ,10} };
@@ -142,7 +144,8 @@ void scene_structure::display()
 	if (gui.display_frame)
 		draw(global_frame, environment);
 	
-	//draw(terrain,environment);
+	terrain.transform.translation = {0,0, -2*pilar_height};
+	draw(terrain,environment);
 	
 	//float racetrack_incline = M_PI/12.0;
 	//racetrack["racetrack1"].transform.translation = {0,0,evaluate_terrain_height(0, 0) + pilar_height};
@@ -182,15 +185,12 @@ void scene_structure::display()
 	}
 	
 	Trajectoire t1("t1",key_positions_mario,key_times_mario, interpolation);
-	std::cout << "test" << std::endl;
 	kartMario->faireAvancerKartManuel(avancementKart, t1);
 	kartMario->kart.update_local_to_global_coordinates();
 	if (update_camera_actif || true)
 	{
 		for (int i = 0; i < nTraj; i++)
 		{
-
-			std::cout << "test" << std::endl;
 			tabKart[i].faireAvancerKartManuel(avancementKart, tabTrajectoire[i]);
 			tabKart[i].kart.update_local_to_global_coordinates();
 

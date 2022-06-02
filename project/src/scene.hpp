@@ -48,6 +48,7 @@ struct scene_structure {
 	// Timer used for the interpolation of the position
 	cgp::timer_interval timer;
 
+	cgp::mesh_drawable terrain;
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
 	Kart* kartMario;

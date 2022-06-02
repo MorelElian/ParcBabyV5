@@ -43,7 +43,7 @@ buffer<float> key_steps = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f
 
 cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
     cgp::mesh_drawable rollercoaster;
-	float rc_thickness = 0.5;
+	float rc_thickness = 0.2;
     float dt = 0.01;
 	float t = key_steps[1] + dt;
 	float tf = key_positions_rc.size() - 2;
@@ -51,17 +51,32 @@ cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
 	// std::cout << t << std::endl;
 	// std::cout << interpolation(t, key_positions, key_steps) << std::endl;
 	// std::cout << interpolation(t+dt, key_positions, key_steps) << std::endl;
-	mesh rc = mesh_primitive_cylinder(rc_thickness, interpolation(t, key_positions_rc, key_steps), interpolation(t+dt, key_positions_rc, key_steps));
+    float rc_width = 1.5;
+
+    vec3 center = interpolation(t, key_positions_rc, key_steps);
+    vec3 center2 = interpolation(t-dt, key_positions_rc, key_steps);
+	mesh rc = mesh_primitive_cylinder(rc_thickness, center, center2);
+    
+    center.x += rc_width;
+    center2.x += rc_width;
+    mesh rc2 = mesh_primitive_cylinder(rc_thickness, center, center2);
 
     while (t < tf){
-        vec3 center = interpolation(t, key_positions_rc, key_steps);
+        center = interpolation(t, key_positions_rc, key_steps);
 		t += dt;
         if (t > tf)
             t = tf;
-		vec3 center2 = interpolation(t, key_positions_rc, key_steps);
+		center2 = interpolation(t, key_positions_rc, key_steps);
 		rc.push_back(mesh_primitive_cylinder(rc_thickness, center, center2));
+        
+        center.x += rc_width;
+        center2.x += rc_width;
+        rc2.push_back(mesh_primitive_cylinder(rc_thickness, center, center2));
     }
-	rollercoaster.initialize(rc, "rollercoaster");
+
+    rc.push_back(rc2);
+    rollercoaster.initialize(rc, "rollercoaster");
+
 	rollercoaster.shading.color = {1,0,0};
 	return rollercoaster;
 }
@@ -71,12 +86,13 @@ float wagon_width = 2;
 float wagon_height = 2;
 
 
-cgp::hierarchy_mesh_drawable Wagon::create_wagon_mesh_drawable(){
+cgp::hierarchy_mesh_drawable Wagon::create_wagon_mesh_drawable(vec3 color){
     cgp::hierarchy_mesh_drawable wagon;
 
     cgp::mesh_drawable w1;
     mesh w = mesh_primitive_parapede(wagon_length, wagon_width, wagon_height);
     w1.initialize(w, "wagon");
+    w1.shading.color = color;
     wagon.add(w1);
     return wagon;
 }
@@ -91,16 +107,25 @@ void Wagon::faireAvancerWagon(float delta)
 	
 }
 
-Wagon::Wagon(Trajectoire _traj){
-    wagon = create_wagon_mesh_drawable();
+Wagon::Wagon(Trajectoire _traj, vec3 color){
+    wagon = create_wagon_mesh_drawable(color);
     traj = _traj;
 }
 
+vec3 red = {1,0,0};
+vec3 green = {0,1,0};
+vec3 blue = {0,0,1};
+vec3 yellow = {1,1,0};
+vec3 aaa = {0,1,1};
+
+buffer<vec3> train_colors = {red, green, blue, yellow, aaa};
+
 Train::Train(int _nb_wagon, Trajectoire traj){
-    train = new Wagon[nb_wagon];
     nb_wagon = _nb_wagon;
+    train = new Wagon[nb_wagon];
+    int nb_colors = train_colors.size();
     for(int i = 0; i < nb_wagon; i++){
-        train[i] = Wagon(traj);
+        train[i] = Wagon(traj, train_colors[i % nb_colors]);
     }
 }
 

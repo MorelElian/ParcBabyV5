@@ -11,9 +11,20 @@ vec3 interpolation(float t, buffer<vec3> const& key_positions, buffer<float> con
 	//std::cout << "a" << std::endl;
 	// Find idx such that key_times[idx] < t < key_times[idx+1]
 	int idx = find_index_of_interval(t, key_times);
+	
+	// std::cout << "idx = " << idx << std::endl;
+	// std::cout << "size key position = " << key_positions.size() << std::endl;
+
 	if (idx <= 0)
 	{
 		std::cout << t << std::endl;
+		std::cout << "pb" <<std::endl;
+		idx = 1;
+	}
+
+	if (idx > key_positions.size()-3)
+	{
+		std::cout << "t = " << t << std::endl;
 		std::cout << "pb" <<std::endl;
 		idx = 1;
 	}
@@ -37,10 +48,11 @@ vec3 interpolation(float t, buffer<vec3> const& key_positions, buffer<float> con
 
 	return p;
 }
+
+
 vec3 derivee_interpolation(float t, buffer<vec3> const& key_positions, buffer<float> const& key_times)
 {
 	int idx = find_index_of_interval(t, key_times);
-
 	// Get parameters (time and position) used to compute the linear interpolation
 	//   (You will need to get more parameters for the spline interpolation)
 	float t0 = key_times[idx - 1];
@@ -152,3 +164,5 @@ int find_index_of_interval(float t, buffer<float> const& intervals)
 		++k;
 	return k;
 }
+
+
