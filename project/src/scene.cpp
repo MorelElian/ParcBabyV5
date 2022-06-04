@@ -128,7 +128,7 @@ void scene_structure::update_cameraArriere()
 
 void scene_structure::update_cameraPresentation()
 {
-	vec3 posCameraPres = tCamera.positionKart();
+	vec3 posCameraPres = tCamera.positionKart(1);
 	environment.camera.look_at(posCameraPres, { disc_radius / (2.0),racetrack_length / 2.0f ,8 });
 }
 void scene_structure::display()
@@ -179,15 +179,16 @@ void scene_structure::display()
 	}
 	
 	Trajectoire t1("t1",key_positions_mario,key_times_mario, interpolation);
-	std::cout << "test" << std::endl;
+	//std::cout << "test" << std::endl;
 	kartMario->faireAvancerKartManuel(avancementKart, t1);
 	kartMario->kart.update_local_to_global_coordinates();
 	if (update_camera_actif || true)
 	{
 		for (int i = 0; i < nTraj; i++)
 		{
+			// maj deplacement
 
-			std::cout << "test" << std::endl;
+			//std::cout << "test" << std::endl;
 			tabKart[i].faireAvancerKartManuel(avancementKart, tabTrajectoire[i]);
 			tabKart[i].kart.update_local_to_global_coordinates();
 
