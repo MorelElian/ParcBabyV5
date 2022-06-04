@@ -13,12 +13,12 @@ class Wagon
 {
     public:
         Wagon() = default;
-        Wagon(Trajectoire _traj);
+        Wagon(Trajectoire _traj, vec3 color);
         cgp::hierarchy_mesh_drawable wagon;
         Trajectoire traj;
 
-        cgp::hierarchy_mesh_drawable create_wagon_mesh_drawable();
-        void faireAvancerWagon(float delta_t);
+        cgp::hierarchy_mesh_drawable create_wagon_mesh_drawable(vec3 color);
+        void faireAvancerWagon(float delta);
 };
 
 
@@ -27,4 +27,5 @@ class Train{
         Train(int _nb_wagon, Trajectoire trajectoire);
         int nb_wagon;
         Wagon* train;
+        void faireAvancerTrain();
 };

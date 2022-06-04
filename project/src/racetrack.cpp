@@ -30,6 +30,7 @@ float pilar_height = 7;
 float pilar_thickness = 2;
 float pivot_height = 4; 
 
+vec3 grey = {0.4f,0.4f,0.4f};
 
 cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
     
@@ -224,6 +225,7 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	racetrack.add(disc1, "racetrack1");
 
 	thickness1.transform.translation = {0,0,-racetrack_thickness};
+	thickness1.shading.color = grey;
 	racetrack.add(thickness1, "racetrack1");
 
 	thickness1.transform.translation = {-2*disc_radius,0,-racetrack_thickness};
@@ -231,6 +233,7 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	racetrack.add(thickness1, "racetrack1");
 
 	thickness2.transform.translation = {0,0,-racetrack_thickness};
+	thickness2.shading.color = grey;
 	racetrack.add(thickness2, "racetrack1");
 
 	thickness2.transform.translation = {0,racetrack_length,-racetrack_thickness};
@@ -377,8 +380,10 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 
 	racetrack.add(departure_line, "racetrack1");
 
+	
     //TUBE
     tube1.transform.translation = {disc_radius,0,0};
+	tube1.shading.color = grey;
     racetrack.add(tube1,"racetrack1");
 
     tube1.name = "tube2";
@@ -394,6 +399,7 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
     racetrack.add(tube1,"racetrack1");
 
     turn1_tube1.transform.translation = {0,0,tube_height};
+	turn1_tube1.shading.color = grey;
     racetrack.add(turn1_tube1,"racetrack1");
 
     turn1_tube1.name = "turn1_tube2";
@@ -402,6 +408,7 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	racetrack.add(turn1_tube1,"racetrack1");
 
     turn2_tube1.transform.translation = {0,0,tube_height};
+	turn2_tube1.shading.color = grey;
     racetrack.add(turn2_tube1,"racetrack1");
 
     turn2_tube1.name = "turn2_tube2";
@@ -510,9 +517,11 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 
 	//PILIERS DE PISTE
 	racetrack_pivot.name = "racetrack_pivot1";
+	racetrack_pivot.shading.color = grey;
 	racetrack.add(racetrack_pivot,"departure");
 
 	racetrack_pilar.name = "racetrack_pilar1";
+	racetrack_pilar.shading.color = grey;
 	racetrack_pilar.transform.rotation = cgp::rotation_transform::from_axis_angle({0,1,0}, M_PI/2.0);
 	racetrack_pilar.transform.translation = {disc_radius + pivot_height,racetrack_length/2.0,-pilar_height - pilar_thickness};
 	racetrack.add(racetrack_pilar,"racetrack_pivot1");
