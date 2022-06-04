@@ -67,7 +67,7 @@ void scene_structure::initialize()
 	tabTrajectoire = new Trajectoire[nTraj];
 	tabKart = new Kart[nTraj];
 	buffer<vec3> key_positions_luigi = trajLuigi();
-	buffer<float> key_times = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.5f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f };
+	buffer<float> key_times = { 0.0f, 1.0f, 2.0f, 3.0f, 4.1f, 5.5f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f };
 	tabTrajectoire[0] = Trajectoire("TrajLuigi", key_positions_luigi, key_times, interpolation);
 	tabKart[0] = Kart("kartLuigi", "assets/personnages/sigleLuigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(1, 1, 1.0));
 
@@ -75,14 +75,15 @@ void scene_structure::initialize()
 	key_times = { 0.0f, 1.0f, 1.6f, 2.4f, 3.2f, 4.0f, 4.6f, 6.0f, 6.8f, 7.6f,9.0f,10.0f};
 	tabTrajectoire[1] = Trajectoire("TrajWaluigi", key_positions, key_times, interpolation);
 	tabKart[1] = Kart("kartWaluigi", "assets/personnages/sigleWaluigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.4, 0.0, 0.8), vec3(1, 1, 0.0));
+
 	key_positions_mario = trajMario();
 	std::cout << key_positions_mario.size() << std::endl;
-	key_times_mario = { 0.0f, 1.0f, 1.8f, 2.7f, 4.0f, 5.0f, 6.0f, 7.0f, 8.4f, 8.8f,9.0f,10.0f};
+	key_times_mario = { 0.0f, 1.0f, 1.8f, 2.7f, 4.0f, 5.0f, 6.0f, 6.7f, 7.8f, 8.5,9.0f,10.0f};
 
 
 	key_positions = trajPeach();
-	key_times = { 0.0f, 1.0f, 1.6f, 2.4f, 3.2f, 4.0f, 4.6f, 6.0f, 6.8f, 7.6f,9.0f,10.0f};
-	tabTrajectoire[2] = Trajectoire("TrajWaluigi", key_positions, key_times, interpolation);
+	key_times = { 0.0f, 1.0f, 1.6f, 2.4f, 3.2f, 4.0f, 4.8f, 6.2f, 7.4f, 8.4f,9.0f,10.0f};
+	tabTrajectoire[2] = Trajectoire("TrajPeach", key_positions, key_times, interpolation);
 	tabKart[2] = Kart("kartPeach", "assets/personnages/siglePeach.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.4, 1.0), vec3(1, 1, 0.0));
 
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
