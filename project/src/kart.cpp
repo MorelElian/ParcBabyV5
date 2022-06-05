@@ -16,7 +16,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	dimension_volant = 0.275 * largeur_kart;
 	largeur_roue_avant = 0.15 * proportion;
 	kart = create_kart(longueur_kart, largeur_kart, hauteur_kart, proportion, color1, color2, nFileFrontKart);
-	hitbox = 1.4;
+	hitbox = 2.0;
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2,vec3 _positionKart)
@@ -46,7 +46,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	signeAvancement = 1.0;
 	turboUtilise = false;
 	drift = false;
-	hitbox = 1.4;
+	hitbox = 2.0;
 	//Element Proche de la base du kart
 	
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
@@ -230,7 +230,7 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		vec3 a = volumeEnglobant[i] - kartAdverse.positionKart;
 		projOrient = a.x * repereAdverse[0].x + a.y * repereAdverse[0].y + a.z * repereAdverse[0].z;
 		projOrientOrtho = a.x * repereAdverse[1].x + a.y * repereAdverse[1].y + a.z * repereAdverse[1].z;
-		if (!(std::abs(projOrient) > 1.1*longueur_kart / 2.0 || std::abs(projOrientOrtho) > 1.1 * largeur_kart / 2.0))
+		if (!(std::abs(projOrient) > hitbox*longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox* largeur_kart / 2.0))
 		{
 
 			std::cout << kartAdverse.nomKart << std::endl;
@@ -247,7 +247,7 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		vec3 a = volumeEnglobant[i] - positionKart;
 		projOrient = a.x * reperePropre[0].x + a.y * reperePropre[0].y + a.z * reperePropre[0].z;
 		projOrientOrtho = a.x * reperePropre[1].x + a.y * reperePropre[1].y + a.z * reperePropre[1].z;
-		if (!(std::abs(projOrient) > 1.1 * longueur_kart / 2.0 || std::abs(projOrientOrtho) > 1.1 * largeur_kart / 2.0))
+		if (!(std::abs(projOrient) > hitbox* longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox * largeur_kart / 2.0))
 		{
 			std::cout << kartAdverse.nomKart << std::endl;
 			collision = true;
