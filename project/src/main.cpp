@@ -74,7 +74,7 @@ int main(int, char* argv[])
 		}
 		else
 		{
-			//scene.update_cameraArriere();
+			scene.update_cameraArriereManuelle();
 		}
 		scene.display();
 		

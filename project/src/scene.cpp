@@ -123,15 +123,6 @@ void scene_structure::update_camera()
 
 void scene_structure::update_cameraManuelle()
 {
-
-	// The camera moves forward all the time
-	//   We consider in this example a constant velocity, so the displacement is: velocity * dt * front-camera-vector
-	float const dt = timer.update();
-	update_camera_actif = true;
-	//vec3 const forward_displacement = 0;
-	//camera.position_camera += forward_displacement;
-	// camera.position_camera += (dt, dt, dt);
-	//camera.manipulator_rotate_trackball({ 0,0 }, { dt,dt });
 	float compteur = 0;
 	float t = timer.t;
 	vec3 p = kartDep->positionKart;
@@ -150,7 +141,15 @@ void scene_structure::update_cameraArriere()
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
+void scene_structure::update_cameraArriereManuelle()
+{
 
+	vec3 p = kartDep->positionKart;
+	vec3 orient = kartDep->orientationKart;
+	vec3 posCamera = p + 7 * orient + vec3(0, 0, 2);
+	vec3 regardCamera = p + vec3(0, 0, 2.0);
+	environment.camera.look_at(posCamera, regardCamera);
+}
 void scene_structure::update_cameraPresentation()
 {
 	vec3 posCameraPres = tCamera.positionKart(1);

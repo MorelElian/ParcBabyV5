@@ -73,6 +73,7 @@ struct scene_structure {
 	void update_cameraArriere();
 	void update_cameraPresentation();
 	void update_cameraManuelle();
+	void update_cameraArriereManuelle();
 	bool update_camera_actif = false;
 	cgp::buffer<float> key_times;
 	cgp::buffer<float> key_times_mario;
