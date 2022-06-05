@@ -97,9 +97,15 @@ cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
 	return rollercoaster;
 }
 
-float wagon_length = 4;
-float wagon_width = 2;
+float wagon_length = 2.5;
+float wagon_width = 1.5;
 float wagon_height = 2;
+
+float wheel_radius = wagon_height*0.2f;
+float wheel_thickness = wagon_width*0.2f;
+
+float seat_thickness = 0.1*wagon_width;
+float seat_height = 0.3*wagon_height;
 
 
 cgp::hierarchy_mesh_drawable Wagon::create_wagon_mesh_drawable(vec3 color){
@@ -109,7 +115,94 @@ cgp::hierarchy_mesh_drawable Wagon::create_wagon_mesh_drawable(vec3 color){
     mesh w = mesh_primitive_parapede(wagon_length, wagon_width, wagon_height);
     w1.initialize(w, "wagon");
     w1.shading.color = color;
+    w1.transform.translation = {0,-wagon_width/2.0f,0};
     wagon.add(w1);
+
+    cgp::mesh_drawable w2;
+    mesh w2_mesh = mesh_primitive_sphere(wagon_width/2.0f, {wagon_length,wagon_width/2.0f,wagon_height/2.0f});
+    w2.initialize(w2_mesh, "w2");
+    w2.shading.color = color;
+    w2.transform.translation = {0,-wagon_width/2.0f,0};
+    wagon.add(w2, "wagon");
+
+    cgp::mesh_drawable wheelA;
+    mesh wheel_mesh = mesh_primitive_cylinder(wheel_radius, {wagon_length/4.0f,-wagon_width/2.0f,0}, {wagon_length/4.0f, -wagon_width/2.0f -wheel_thickness,0});
+    wheel_mesh.push_back(mesh_primitive_disc(wheel_radius, {wagon_length/4.0f,-wagon_width/2.0f -wheel_thickness,0}, {0,1,0}));
+
+    wheelA.initialize(wheel_mesh, "wheelA1");
+    wheelA.shading.color = {0,0,0};
+    wagon.add(wheelA, "wagon");
+
+    wheelA.name = "wheelA2";
+    wheelA.transform.translation = {wagon_length/2.0f,0,0};
+    wagon.add(wheelA, "wagon");
+
+
+
+    cgp::mesh_drawable wheelB;
+    mesh wheel_mesh2 = mesh_primitive_cylinder(wheel_radius, {wagon_length/4.0f,wagon_width/2.0f,0}, {wagon_length/4.0f, wagon_width/2.0f + wheel_thickness,0});
+    wheel_mesh2.push_back(mesh_primitive_disc(wheel_radius, {wagon_length/4.0f,wagon_width/2.0f + wheel_thickness,0}, {0,1,0}));
+
+    wheelB.initialize(wheel_mesh2, "wheelB1");
+    wheelB.shading.color = {0,0,0};
+    wagon.add(wheelB, "wagon");
+
+    wheelB.name = "wheelB2";
+    wheelB.transform.translation = {wagon_length/2.0f,0,0};
+    wagon.add(wheelB, "wagon");
+
+    cgp::mesh_drawable seatA;
+    mesh seatA_mesh = mesh_primitive_cylinder(seat_thickness, {wagon_length/8.0f, 2*seat_thickness, wagon_height}, {wagon_length/8.0f, 2*seat_thickness, wagon_height + seat_height});
+    seatA.initialize(seatA_mesh, "seatA1");
+    seatA.shading.color = {0, 0, 0};
+    seatA.transform.translation = {0,-wagon_width/2.0f,0};
+    wagon.add(seatA, "wagon");
+
+    seatA.name = "seatA2";
+    seatA.transform.translation = {0,-wagon_width/2.0f + wagon_width - 4*seat_thickness,0};
+    wagon.add(seatA, "wagon");
+
+    seatA.name = "seatA3";
+    seatA.transform.translation = {wagon_length*0.5,-wagon_width/2.0f,0};
+    wagon.add(seatA, "wagon");
+
+    seatA.name = "seatA4";
+    seatA.transform.translation = {wagon_length*0.5,-wagon_width/2.0f + wagon_width -4*seat_thickness,0};
+    wagon.add(seatA, "wagon");
+
+
+
+    cgp::mesh_drawable seatB;
+    mesh seatB_mesh = mesh_primitive_cylinder(seat_thickness, {wagon_length/8.0f, 2*seat_thickness, wagon_height + seat_height}, {wagon_length/8.0f, wagon_width - 2*seat_thickness, wagon_height + seat_height});
+    seatB.initialize(seatB_mesh, "seatB1");
+    seatB.shading.color = {0, 0, 0};
+    seatB.transform.translation = {0,-wagon_width/2.0f,0};
+    wagon.add(seatB, "wagon");
+
+    seatB.name = "seatB2";
+    seatB.transform.translation = {wagon_length*0.5,-wagon_width/2.0f,0};
+    wagon.add(seatB, "wagon");
+
+    cgp::mesh_drawable seatC;
+    mesh seatC_mesh = mesh_primitive_sphere(seat_thickness, {wagon_length/8.0f, 2*seat_thickness, wagon_height + seat_height});
+    seatC.initialize(seatC_mesh, "seatC1");
+    seatC.shading.color = {0, 0, 0};
+    seatC.transform.translation = {0,-wagon_width/2.0f,0};
+    wagon.add(seatC, "wagon");
+
+    seatC.name = "seatC2";
+    seatC.transform.translation = {0,-wagon_width/2.0f + wagon_width - 4*seat_thickness,0};
+    wagon.add(seatC, "wagon");
+
+    seatC.name = "seatC3";
+    seatC.transform.translation = {wagon_length*0.5,-wagon_width/2.0f,0};
+    wagon.add(seatC, "wagon");
+
+    seatC.name = "seatC4";
+    seatC.transform.translation = {wagon_length*0.5,-wagon_width/2.0f + wagon_width -4*seat_thickness,0};
+    wagon.add(seatC, "wagon");
+
+
     return wagon;
 }
 
