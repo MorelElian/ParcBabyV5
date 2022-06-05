@@ -238,7 +238,7 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 	}
 	buffer<vec3> reperePropre = getRepereAssocie();
 	volumeEnglobant = kartAdverse.volumeEnglobant();
-	for (int i = 0; i < 4; i++)
+	/*for (int i = 0; i < 4; i++)
 	{
 		vec3 a = volumeEnglobant[i] - positionKart;
 		projOrient = a.x * reperePropre[0].x + a.y * reperePropre[0].y + a.z * reperePropre[0].z;
@@ -251,7 +251,7 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 			return 5.0 * directionForce /( 0.1 *norm(positionKart - kartAdverse.positionKart));
 		}
 		
-	}
+	}*/
 	return directionForce;
 }
 
