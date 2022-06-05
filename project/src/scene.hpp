@@ -71,7 +71,10 @@ struct scene_structure {
 	void display_gui(); // The display of the GUI, also called within the animation loop
 	void update_camera();
 	void update_cameraArriere();
-	void update_cameraPresentation();
+	
+	void update_cameraPresentationA();
+	void update_cameraPresentationB();
+
 	void update_cameraManuelle();
 	void update_cameraArriereManuelle();
 	bool update_camera_actif = false;
@@ -86,8 +89,10 @@ struct scene_structure {
 	Kart* tabKart;
 	int nTraj = 3;
 	Trajectoire *tabTrajectoire;
-	Trajectoire tCamera;
 	const char** tabNomTraj[3];
+
+	Trajectoire tCameraA;
+	Trajectoire tCameraB;
 
 	//double avancement_update = 1.0;
 

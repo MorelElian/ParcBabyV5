@@ -58,10 +58,24 @@ void scene_structure::initialize()
 	traj_wagon = Trajectoire("train", key_positions_rc, key_steps, interpolation);
 	train = new Train(10, traj_wagon);
 	
-	buffer<vec3> key_positions_cam = { {disc_radius / (2.0),racetrack_length / 2.0f ,10},{ 5.0 * disc_radius, -racetrack_length / 2.0f ,7}, { 5.0 * disc_radius ,racetrack_length / 2.0f,5}, {3 * disc_radius ,racetrack_length ,5}, {0,racetrack_length + disc_radius / 2.0f ,6},{-disc_radius,racetrack_length + disc_radius / 2.0f ,4}
-	,{-disc_radius / (1.4),- racetrack_length / 2.0f ,6} ,{disc_radius ,racetrack_length / 2.8f ,5},{disc_radius / (2.0),racetrack_length / 2.8f ,10} ,{disc_radius / (2.0),racetrack_length / 2.0f ,10} };
-	buffer<float> key_times_cam = { 0.0f, 1.0f, 5.0f, 7.0f, 12.0f, 14.0f,16.0f, 17.0f, 19.0f ,21.0f};
-	tCamera = Trajectoire("er", key_positions_cam, key_times_cam, interpolation);
+
+	//CAMERA
+	vec3 pA0 = {disc_radius / (2.0),racetrack_length / 2.0f ,10};
+	vec3 pA1 = { 5.0 * disc_radius, -racetrack_length / 2.0f ,7};
+	vec3 pA2 = { 5.0 * disc_radius ,racetrack_length / 2.0f,5};
+	vec3 pA3 = {3 * disc_radius ,racetrack_length ,5};
+	vec3 pA4 = {0,racetrack_length + disc_radius / 2.0f ,6};
+	vec3 pA5 = {-disc_radius,racetrack_length + disc_radius / 2.0f ,4};
+	vec3 pA6 = {-disc_radius / (1.4),- racetrack_length / 2.0f ,6};
+	vec3 pA7 = {disc_radius ,racetrack_length / 2.8f ,5};
+	vec3 pA8 = {disc_radius / (2.0),racetrack_length / 2.8f ,10};
+	vec3 pA9 = {disc_radius / (2.0),racetrack_length / 2.0f ,10};
+
+	buffer<vec3> key_positions_camA = {pA0, pA1, pA2, pA3, pA4, pA5, pA6, pA7, pA8, pA9};
+	buffer<float> key_times_camA = { 0.0f, 1.0f, 5.0f, 7.0f, 12.0f, 14.0f,16.0f, 17.0f, 19.0f ,21.0f};
+	tCameraA = Trajectoire("tCameraA", key_positions_camA, key_times_camA, interpolation);
+
+	tCameraB = Trajectoire("tCameraB", key_positions_rc, key_steps, interpolation);
 	
 	//Initialisation trajectoires
 	tabTrajectoire = new Trajectoire[nTraj];
@@ -150,11 +164,20 @@ void scene_structure::update_cameraArriereManuelle()
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
-void scene_structure::update_cameraPresentation()
+
+void scene_structure::update_cameraPresentationA()
 {
-	vec3 posCameraPres = tCamera.positionKart(1);
+	vec3 posCameraPres = tCameraA.positionKart(1);
 	environment.camera.look_at(posCameraPres, { disc_radius / (2.0),racetrack_length / 2.0f ,8 });
 }
+void scene_structure::update_cameraPresentationB()
+{
+	vec3 posCameraPres = tCameraB.positionKart(1);
+	posCameraPres.z += 1;
+	environment.camera.look_at(posCameraPres, { disc_radius / (2.0),racetrack_length / 2.0f ,8 });
+}
+
+
 void scene_structure::display()
 {
 	// Basic elements of the scene
