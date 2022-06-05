@@ -52,6 +52,7 @@ struct scene_structure {
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
 	Kart* kartMario;
+	Kart* kartDep;
 	cgp::hierarchy_mesh_drawable kartLuigi;
 	cgp::mesh_drawable rollercoaster;
 	
@@ -70,6 +71,7 @@ struct scene_structure {
 	void update_camera();
 	void update_cameraArriere();
 	void update_cameraPresentation();
+	void update_cameraManuelle();
 	bool update_camera_actif = false;
 	cgp::buffer<float> key_times;
 	cgp::buffer<float> key_times_mario;

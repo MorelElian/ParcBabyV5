@@ -15,11 +15,21 @@ public:
 	float largeur_roue_arriere;
 	float largeur_roue_avant;
 	float dimension_volant;
+	float direction;
 	hierarchy_mesh_drawable kart;
+	vec3 accelerationKart;
+	vec3 vitesseKart;
+	vec3 positionKart;
+	vec3 orientationKart;
 	Kart() = default;
 	Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2);
+	Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2, vec3 _positionKart);
 	void faireAvancerKart(int deplacement, Trajectoire traj);
 	void faireAvancerKartManuel(float& avancement, Trajectoire traj);
+	void updateAccelerationKart(float pressForward);
+	void updateVitesseKart(float dt);
+	void udpatePositionKart(float pressForward,float dt);
+	void updateOrientationKart(bool droite);
 protected:
 	mesh_drawable baseKartTheorique;
 	mesh_drawable baseKart;
@@ -57,5 +67,6 @@ protected:
 	mesh_drawable discRoueAvtD;
 	mesh_drawable discRoueArG;
 	mesh_drawable discRoueAvtG;
+	float tempsDuKart;
 	};
 hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, float hauteur_kart, float proportion, vec3 color1, vec3 color2,const char* nFileFrontKart);

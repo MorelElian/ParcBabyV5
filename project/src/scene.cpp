@@ -88,6 +88,7 @@ void scene_structure::initialize()
 
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
 
+	kartDep = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0),vec3(4,0,0));
 	// Key 3D positions
 
 	// Initialize the helping structure to display/interact with these positions
@@ -113,12 +114,33 @@ void scene_structure::update_camera()
 	//camera.manipulator_rotate_trackball({ 0,0 }, { dt,dt });
 	float compteur = 0;
 	float t = timer.t;
-	vec3 p = interpolation(avancementKart, key_positions_mario,key_times_mario);
+	vec3 p = interpolation(avancementKart, key_positions_mario, key_times_mario);
 	vec3 p_prec = interpolation(avancementKart - 0.001, key_positions_mario, key_times_mario);
-	vec3 posCamera =p -  (p-p_prec) / norm(p - p_prec) * 8 + vec3(-0.5,0,3);
+	vec3 posCamera = p - (p - p_prec) / norm(p - p_prec) * 8 + vec3(-0.5, 0, 3);
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
+
+void scene_structure::update_cameraManuelle()
+{
+
+	// The camera moves forward all the time
+	//   We consider in this example a constant velocity, so the displacement is: velocity * dt * front-camera-vector
+	float const dt = timer.update();
+	update_camera_actif = true;
+	//vec3 const forward_displacement = 0;
+	//camera.position_camera += forward_displacement;
+	// camera.position_camera += (dt, dt, dt);
+	//camera.manipulator_rotate_trackball({ 0,0 }, { dt,dt });
+	float compteur = 0;
+	float t = timer.t;
+	vec3 p = kartDep->positionKart;
+	vec3 orient = kartDep->orientationKart;
+	vec3 posCamera = p  - 7 * orient + vec3(0,0,2);
+	vec3 regardCamera = p + vec3(0, 0, 2.0);
+	environment.camera.look_at(posCamera, regardCamera);
+}
+
 void scene_structure::update_cameraArriere()
 {
 
@@ -146,14 +168,15 @@ void scene_structure::display()
 		draw(global_frame, environment);
 	
 	terrain.transform.translation = {0,0, -2*pilar_height};
-	draw(terrain,environment);
+	racetrack.update_local_to_global_coordinates();
+	
 	
 	//float racetrack_incline = M_PI/12.0;
 	//racetrack["racetrack1"].transform.translation = {0,0,evaluate_terrain_height(0, 0) + pilar_height};
 	//racetrack["racetrack_pivot1"].transform.rotation = cgp::rotation_transform::from_axis_angle({1,0,0}, -racetrack_incline);
 	//racetrack["racetrack1"].transform.rotation = cgp::rotation_transform::from_axis_angle({1,0,0}, racetrack_incline);
 
-	racetrack.update_local_to_global_coordinates();
+	draw(terrain, environment);
 	draw(racetrack, environment);
 	draw(rollercoaster, environment);
 	
@@ -199,6 +222,28 @@ void scene_structure::display()
 		}
 	}
 	draw(kartMario->kart, environment);
+	if (keyboard.right)
+	{
+		kartDep->updateOrientationKart(true);
+	}
+	else if (keyboard.left)
+	{
+		kartDep->updateOrientationKart(false);
+	}
+	float pressForward = 0;
+	if (keyboard.up)
+	{
+		pressForward = 1;
+	}
+	else if (keyboard.down)
+	{
+		pressForward = 2;
+	}
+	//std::cout << pressForward << std::endl;
+	kartDep->udpatePositionKart(pressForward,0.1);
+	
+	kartDep->kart.update_local_to_global_coordinates();
+	draw(kartDep->kart, environment);
 	//draw(kartLuigi, environment);
 	
 	//keyframe.display_current_position(interpolation(avancementKart, keyframe.key_positions, keyframe.key_times), environment);
