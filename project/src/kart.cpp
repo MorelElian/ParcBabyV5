@@ -120,7 +120,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 		accelerationMoteur = 0;
 	}
 	accelerationKart = accelerationMoteur*orientationKart - 0.5 * vitesseKart;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		
 		accelerationKart += detecterCollisionKart(tabKart[i]);
