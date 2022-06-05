@@ -176,6 +176,9 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	orientationKart = vec3(0, 1, 0);
 	tempsDuKart = 0.0;
 	direction = 0;
+	angleRoueArriere = 0.0;
+	angleRoueAvant = 0.0;
+	signeAvancement = 1.0;
 	//Element Proche de la base du kart
 
 	kartGauche.initialize(mesh_primitive_parapede(longueur_kart / 2.0, 0.4 * largeur_kart, 1.5 * hauteur_kart), "kartGauche");
@@ -358,7 +361,7 @@ void Kart::updateAccelerationKart(float pressForward)
 	{
 		accelerationMoteur = 6;
 	}
-	else if (pressForward == 2)
+	else if (pressForward == -1)
 	{
 		accelerationMoteur = -2;
 	}
@@ -374,17 +377,27 @@ void Kart::updateVitesseKart(float dt)
 }
 void Kart::udpatePositionKart(float pressForward,float dt)
 {
+	if (pressForward == 1)
+	{
+		signeAvancement = 1.0;
+	}
+	else if (pressForward == -1)
+	{
+		signeAvancement = -1.0;
+	}
 	updateAccelerationKart(pressForward);
 	updateVitesseKart(dt);
 	positionKart = dt * vitesseKart + positionKart;
+	angleRoueAvant += signeAvancement * dt * norm(vitesseKart) / hauteur_kart;
+	angleRoueArriere += signeAvancement * dt * norm(vitesseKart) / hauteur_kart;
 	tempsDuKart += dt;
 	//std::cout <<positionKart <<std::endl;
 	kart["baseKartTheorique"].transform.translation = positionKart;
 	kart["baseKartTheorique"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0),orientationKart / norm(orientationKart));
-	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, -norm(vitesseKart)/hauteur_kart * tempsDuKart);
-	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 },-norm(vitesseKart) / hauteur_kart * tempsDuKart);
-	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, -norm(vitesseKart) / hauteur_kart * tempsDuKart);
-	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, -norm(vitesseKart) / hauteur_kart * tempsDuKart);
+	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, angleRoueAvant);
+	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, angleRoueAvant );
+	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, angleRoueArriere );
+	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, angleRoueArriere );
 }
 void Kart::updateOrientationKart(bool droite)
 {

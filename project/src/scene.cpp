@@ -237,7 +237,7 @@ void scene_structure::display()
 	}
 	else if (keyboard.down)
 	{
-		pressForward = 2;
+		pressForward = -1;
 	}
 	//std::cout << pressForward << std::endl;
 	kartDep->udpatePositionKart(pressForward,0.1);
