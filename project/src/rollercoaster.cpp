@@ -55,11 +55,16 @@ cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
 
     vec3 center = interpolation(t, key_positions_rc, key_steps);
     vec3 center2 = interpolation(t-dt, key_positions_rc, key_steps);
+    center.x += rc_width/2.0f;
+    center2.x += rc_width/2.0f;
 	mesh rc = mesh_primitive_cylinder(rc_thickness, center, center2);
     
-    center.x += rc_width;
-    center2.x += rc_width;
+    center.x -= rc_width;
+    center2.x -= rc_width;
     mesh rc2 = mesh_primitive_cylinder(rc_thickness, center, center2);
+
+    int i = 0; 
+    vec3 center3;
 
     while (t < tf){
         center = interpolation(t, key_positions_rc, key_steps);
@@ -67,11 +72,22 @@ cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
         if (t > tf)
             t = tf;
 		center2 = interpolation(t, key_positions_rc, key_steps);
+        center.x += rc_width/2.0f;
+        center2.x += rc_width/2.0f;
+        if(i%5 == 0){
+            center3 = {center.x, center.y, center.z};
+        }
 		rc.push_back(mesh_primitive_cylinder(rc_thickness, center, center2));
         
-        center.x += rc_width;
-        center2.x += rc_width;
+        center.x -= rc_width;
+        center2.x -= rc_width;
         rc2.push_back(mesh_primitive_cylinder(rc_thickness, center, center2));
+
+        if(i%5 == 0){
+            rc2.push_back(mesh_primitive_cylinder(rc_thickness, center, center3));
+        }
+
+        i++;
     }
 
     rc.push_back(rc2);
