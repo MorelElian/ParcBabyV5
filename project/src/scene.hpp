@@ -18,6 +18,7 @@
 // The element of the GUI that are not already stored in other structures
 struct gui_parameters {
 	bool display_frame = true;
+	bool drift = false;
 };
 
 

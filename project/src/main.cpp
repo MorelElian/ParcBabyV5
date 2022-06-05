@@ -131,6 +131,7 @@ GLFWwindow* standard_window_initialization(int width_target, int height_target)
 	int width = 0, height = 0;
 	glfwGetWindowSize(window, &width, &height);
 	scene.inputs.window = { width, height };
+	
 
 	// Display debug information on command line
 	std::cout << cgp::opengl_info_display() << std::endl;

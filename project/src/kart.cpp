@@ -180,6 +180,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	angleRoueAvant = 0.0;
 	signeAvancement = 1.0;
 	turboUtilise = false;
+	drift = false;
 	//Element Proche de la base du kart
 
 	kartGauche.initialize(mesh_primitive_parapede(longueur_kart / 2.0, 0.4 * largeur_kart, 1.5 * hauteur_kart), "kartGauche");
@@ -357,6 +358,7 @@ void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 void Kart::updateAccelerationKart(float pressForward)
 {
 	//std::cout << pressForward << std::endl;
+	std::cout << turboUtilise << std::endl;
 	float accelerationMoteur;
 	if (pressForward ==1)
 	{
@@ -383,11 +385,19 @@ void Kart::updateAccelerationKart(float pressForward)
 }
 void Kart::updateVitesseKart(float dt)
 {
-	float scal = (dt * accelerationKart + vitesseKart).x * orientationKart.x + (dt * accelerationKart + vitesseKart).y * orientationKart.y
-		+ (dt * accelerationKart + vitesseKart).z * orientationKart.z;
-	vitesseKart.x = scal * orientationKart.x;
-	vitesseKart.y = scal* orientationKart.y;
-	vitesseKart.z =scal* orientationKart.z;
+	if (drift)
+	{
+		vitesseKart = vitesseKart + dt * accelerationKart;
+	}
+	else
+	{
+		float scal = (dt * accelerationKart + vitesseKart).x * orientationKart.x + (dt * accelerationKart + vitesseKart).y * orientationKart.y
+			+ (dt * accelerationKart + vitesseKart).z * orientationKart.z;
+		vitesseKart.x = scal * orientationKart.x;
+		vitesseKart.y = scal * orientationKart.y;
+		vitesseKart.z = scal * orientationKart.z;
+	}
+	
 }
 void Kart::udpatePositionKart(float pressForward,float dt)
 {

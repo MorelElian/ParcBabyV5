@@ -16,6 +16,7 @@ public:
 	float largeur_roue_avant;
 	float dimension_volant;
 	float direction;
+	bool drift;
 	hierarchy_mesh_drawable kart;
 	vec3 accelerationKart;
 	vec3 vitesseKart;
@@ -72,5 +73,6 @@ protected:
 	float angleRoueArriere;
 	float signeAvancement;
 	float turboUtilise;
+	
 	};
 hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, float hauteur_kart, float proportion, vec3 color1, vec3 color2,const char* nFileFrontKart);

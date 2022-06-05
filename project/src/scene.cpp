@@ -166,7 +166,10 @@ void scene_structure::display()
 	
 	if (gui.display_frame)
 		draw(global_frame, environment);
-	
+	if (gui.drift)
+	{
+		kartDep->drift = true;
+	}
 	terrain.transform.translation = {0,0, -2*pilar_height};
 	racetrack.update_local_to_global_coordinates();
 	
@@ -257,7 +260,8 @@ void scene_structure::display()
 
 void scene_structure::display_gui()
 {
-	//ImGui::Checkbox("Frame", &gui.display_frame);
+	ImGui::Checkbox("Frame", &gui.display_frame);
+	ImGui::Checkbox("Drift", &gui.drift);
 	//ImGui::SliderFloat("Time scale", &timer.scale, 0.0f, 2.0f);
 	//ImGui::SliderFloat("Particle emission", &timer.event_period, 0.1f, 2.0f);
 }
