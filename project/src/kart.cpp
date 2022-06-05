@@ -233,7 +233,7 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 			std::cout << norm(kartAdverse.positionKart - positionKart) << std::endl;
 
 			directionForce = (positionKart - kartAdverse.positionKart) /norm(positionKart - kartAdverse.positionKart);
-			return 20.0 *  directionForce * 1/( 0.1 * norm(positionKart - kartAdverse.positionKart));
+			return 5.0 *  directionForce * 1/( 0.1 * norm(positionKart - kartAdverse.positionKart));
 		}
 	}
 	buffer<vec3> reperePropre = getRepereAssocie();
@@ -248,7 +248,7 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 			std::cout << kartAdverse.nomKart << std::endl;
 			
 			directionForce = (positionKart - kartAdverse.positionKart) / norm(positionKart - kartAdverse.positionKart);
-			return 20 * directionForce /( 0.1 *norm(positionKart - kartAdverse.positionKart));
+			return 5.0 * directionForce /( 0.1 *norm(positionKart - kartAdverse.positionKart));
 		}
 		
 	}
