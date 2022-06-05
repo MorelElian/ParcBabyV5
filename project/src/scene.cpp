@@ -239,6 +239,10 @@ void scene_structure::display()
 	{
 		pressForward = -1;
 	}
+	if (keyboard.ctrl)
+	{
+		pressForward = 2;
+	}
 	//std::cout << pressForward << std::endl;
 	kartDep->udpatePositionKart(pressForward,0.1);
 	

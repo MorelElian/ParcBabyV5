@@ -179,6 +179,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	angleRoueArriere = 0.0;
 	angleRoueAvant = 0.0;
 	signeAvancement = 1.0;
+	turboUtilise = false;
 	//Element Proche de la base du kart
 
 	kartGauche.initialize(mesh_primitive_parapede(longueur_kart / 2.0, 0.4 * largeur_kart, 1.5 * hauteur_kart), "kartGauche");
@@ -365,6 +366,15 @@ void Kart::updateAccelerationKart(float pressForward)
 	{
 		accelerationMoteur = -2;
 	}
+	else if (pressForward == 2 && turboUtilise < 10)
+	{
+		turboUtilise++;
+		accelerationMoteur = 15;
+	}
+	else if (pressForward == 2)
+	{
+		accelerationMoteur = 6;
+	}
 	else
 	{
 		accelerationMoteur = 0;
@@ -413,8 +423,17 @@ void Kart::updateOrientationKart(bool droite)
 	}
 	kart["lienKtReAvtD"].transform.rotation = rotation_transform::from_axis_angle(vec3(0, 0, 1), direction);
 	kart["lienKtReAvtG"].transform.rotation = rotation_transform::from_axis_angle(vec3(0, 0, 1), direction);
-	mat3 rotation = { {std::cos(direction),std::sin(direction),0},{-std::sin(direction),std::cos(direction),0},{0,0,1} };
-	orientationKart = rotation*orientationKart;
+	if (norm(vitesseKart) > 2.0)
+	{
+		mat3 rotation = { {std::cos(direction),std::sin(direction),0},{-std::sin(direction),std::cos(direction),0},{0,0,1} };
+		orientationKart = rotation * orientationKart;
+	}
+	else
+	{
+		mat3 rotation = { {std::cos(direction* norm(vitesseKart) * 0.2),std::sin(direction * norm(vitesseKart) * 0.2),0},
+			{-std::sin(direction * norm(vitesseKart) * 0.2),std::cos(direction * norm(vitesseKart) * 0.2),0},{0,0,1} };
+		orientationKart = rotation * orientationKart;
+	}
 }
 hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, float hauteur_kart, float proportion, vec3 color1, vec3 color2,const char *nFileFrontKart)
 {

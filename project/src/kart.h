@@ -71,5 +71,6 @@ protected:
 	float angleRoueAvant;
 	float angleRoueArriere;
 	float signeAvancement;
+	float turboUtilise;
 	};
 hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, float hauteur_kart, float proportion, vec3 color1, vec3 color2,const char* nFileFrontKart);
