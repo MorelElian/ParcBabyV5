@@ -238,7 +238,7 @@ Train::Train(int _nb_wagon, Trajectoire traj){
     }
 }
 
-float delta = 0.2f;
+float delta = 0.15f;
 
 void Train::faireAvancerTrain(){
     for(int i = 0; i < nb_wagon; i++){

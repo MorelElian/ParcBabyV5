@@ -48,7 +48,7 @@ int main(int, char* argv[])
 	//     Animation Loop
 	// ************************ //
 	std::cout<<"Start animation loop ..."<<std::endl;
-	bool camera = false;
+	bool camera = true;
 	cgp::timer_basic timerBase;
 	while (!glfwWindowShouldClose(window))
 	{
