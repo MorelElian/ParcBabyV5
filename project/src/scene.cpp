@@ -240,7 +240,7 @@ void scene_structure::display()
 	}
 	else
 	{
-		kartDep->drift = true;
+		kartDep->drift = false;
 	}
 	//std::cout << pressForward << std::endl;
 	kartDep->udpatePositionKart(pressForward,0.1,tabKart);

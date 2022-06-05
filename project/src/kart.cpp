@@ -16,6 +16,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	dimension_volant = 0.275 * largeur_kart;
 	largeur_roue_avant = 0.15 * proportion;
 	kart = create_kart(longueur_kart, largeur_kart, hauteur_kart, proportion, color1, color2, nFileFrontKart);
+	hitbox = 1.4;
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2,vec3 _positionKart)
@@ -45,6 +46,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	signeAvancement = 1.0;
 	turboUtilise = false;
 	drift = false;
+	hitbox = 1.4;
 	//Element Proche de la base du kart
 	
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
@@ -97,6 +99,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 {
 	//std::cout << pressForward << std::endl;
 	//std::cout << turboUtilise << std::endl;
+	collision = false;
 	float accelerationMoteur;
 	if (pressForward ==1)
 	{
@@ -120,7 +123,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 		accelerationMoteur = 0;
 	}
 	accelerationKart = accelerationMoteur*orientationKart - 0.5 * vitesseKart;
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 3; i++)
 	{
 		
 		accelerationKart += detecterCollisionKart(tabKart[i]);
@@ -128,7 +131,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 }
 void Kart::updateVitesseKart(float dt)
 {
-	if (drift)
+	if (drift || collision)
 	{
 		vitesseKart = vitesseKart + dt * accelerationKart;
 	}
@@ -198,10 +201,10 @@ buffer<vec3> Kart::volumeEnglobant()
 		{0,0,1} };
 	vec3 orthoOrient = rot90 * orientationKart ;
 	buffer<vec3> volumeEnglobant = {
-		positionKart + longueur_kart / 2.0 * 1.1 * orientationKart - 1.1*orthoOrient * largeur_kart / 2.0,
-		positionKart + longueur_kart / 2.0 * 1.1*orientationKart + 1.1 * orthoOrient * largeur_kart / 2.0,
-		positionKart - 1.1 * longueur_kart / 2.0 * orientationKart + 1.1 * orthoOrient * largeur_kart / 2.0,
-		positionKart - 1.1 * longueur_kart / 2.0 * orientationKart - 1.1 * orthoOrient * largeur_kart / 2.0,
+		positionKart + hitbox * longueur_kart / 2.0  * orientationKart - hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart + hitbox * longueur_kart / 2.0*orientationKart + hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart - hitbox * longueur_kart / 2.0 * orientationKart + hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart - hitbox * longueur_kart / 2.0 * orientationKart - hitbox * orthoOrient * largeur_kart / 2.0,
 	};
 	return volumeEnglobant;
 
@@ -229,16 +232,17 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		projOrientOrtho = a.x * repereAdverse[1].x + a.y * repereAdverse[1].y + a.z * repereAdverse[1].z;
 		if (!(std::abs(projOrient) > 1.1*longueur_kart / 2.0 || std::abs(projOrientOrtho) > 1.1 * largeur_kart / 2.0))
 		{
+
 			std::cout << kartAdverse.nomKart << std::endl;
 			std::cout << norm(kartAdverse.positionKart - positionKart) << std::endl;
-
+			collision = true;
 			directionForce = (positionKart - kartAdverse.positionKart) /norm(positionKart - kartAdverse.positionKart);
 			return 5.0 *  directionForce * 1/( 0.1 * norm(positionKart - kartAdverse.positionKart));
 		}
 	}
 	buffer<vec3> reperePropre = getRepereAssocie();
 	volumeEnglobant = kartAdverse.volumeEnglobant();
-	/*for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		vec3 a = volumeEnglobant[i] - positionKart;
 		projOrient = a.x * reperePropre[0].x + a.y * reperePropre[0].y + a.z * reperePropre[0].z;
@@ -246,12 +250,12 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		if (!(std::abs(projOrient) > 1.1 * longueur_kart / 2.0 || std::abs(projOrientOrtho) > 1.1 * largeur_kart / 2.0))
 		{
 			std::cout << kartAdverse.nomKart << std::endl;
-			
+			collision = true;
 			directionForce = (positionKart - kartAdverse.positionKart) / norm(positionKart - kartAdverse.positionKart);
 			return 5.0 * directionForce /( 0.1 *norm(positionKart - kartAdverse.positionKart));
 		}
 		
-	}*/
+	}
 	return directionForce;
 }
 
