@@ -17,6 +17,8 @@ public:
 	float dimension_volant;
 	float direction;
 	bool drift;
+	bool collision;
+	float hitbox;
 	hierarchy_mesh_drawable kart;
 	vec3 accelerationKart;
 	vec3 vitesseKart;
