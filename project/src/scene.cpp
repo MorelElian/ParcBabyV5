@@ -88,7 +88,7 @@ void scene_structure::initialize()
 
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
 
-	kartDep = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0),vec3(4,0,0));
+	kartDep = new Kart("kartMario", "assets/personnages/sigleBowser.png", 1.2, 0.4, 0.15, 3.0, vec3(0.1, 0.1, 0.1), vec3(1.0, 0, 0.0),vec3(4,0,0));
 	// Key 3D positions
 
 	// Initialize the helping structure to display/interact with these positions
@@ -200,30 +200,32 @@ void scene_structure::display()
 	//  This is this function that you need to complete
 	//vec3 p = interpolation_hermite(t, keyframe.key_positions, keyframe.key_times, key_derivee);
 	//vec3 p_p = derivee_hermite(t, keyframe.key_positions, keyframe.key_times,key_derivee);
-	if (keyboard.up)
-	{
-		avancementKart += 0.03;
-		std::cout << avancementKart << std::endl;
-	}
-	if (keyboard.down)
-	{
-		avancementKart -= 0.03;
-	}
 	
 	Trajectoire t1("t1",key_positions_mario,key_times_mario, interpolation);
-	kartMario->faireAvancerKartManuel(avancementKart, t1);
+	kartMario->faireAvancerKart(2, t1);
 	kartMario->kart.update_local_to_global_coordinates();
 	if (update_camera_actif || true)
 	{
 		for (int i = 0; i < nTraj; i++)
 		{
-			tabKart[i].faireAvancerKartManuel(avancementKart, tabTrajectoire[i]);
+			tabKart[i].faireAvancerKart(2, tabTrajectoire[i]);
 			tabKart[i].kart.update_local_to_global_coordinates();
-
 			draw(tabKart[i].kart, environment);
 		}
 	}
 	draw(kartMario->kart, environment);
+	float pressForward = 0;
+	if (keyboard.up)
+	{
+		avancementKart += 0.03;
+		//std::cout << avancementKart << std::endl;
+		pressForward = 1;
+	}
+	if (keyboard.down)
+	{
+		avancementKart -= 0.03;
+		pressForward = -1;
+	}
 	if (keyboard.right)
 	{
 		kartDep->updateOrientationKart(true);
@@ -232,21 +234,16 @@ void scene_structure::display()
 	{
 		kartDep->updateOrientationKart(false);
 	}
-	float pressForward = 0;
-	if (keyboard.up)
-	{
-		pressForward = 1;
-	}
-	else if (keyboard.down)
-	{
-		pressForward = -1;
-	}
 	if (keyboard.ctrl)
 	{
-		pressForward = 2;
+		kartDep->drift = true;
+	}
+	else
+	{
+		kartDep->drift = true;
 	}
 	//std::cout << pressForward << std::endl;
-	kartDep->udpatePositionKart(pressForward,0.1);
+	kartDep->udpatePositionKart(pressForward,0.1,tabKart);
 	
 	kartDep->kart.update_local_to_global_coordinates();
 	draw(kartDep->kart, environment);
