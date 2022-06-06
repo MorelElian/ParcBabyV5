@@ -52,7 +52,7 @@ void scene_structure::initialize()
 	racetrack = create_racetrack_mesh_drawable();
 	rollercoaster = create_rollercoaster_mesh_drawable();
 	
-	nb_wagon = 10;
+	nb_wagon = 7;
 	delta = 0.15f;
 	buffer<vec3> extern key_positions_rc;
 	buffer<float> extern key_steps;
@@ -272,12 +272,12 @@ void scene_structure::display()
 	}
 	else
 	{
-		kartDep->kart["kartPupitre"].drawable.texture = opengl_load_texture_image("assets/personnages/siglePeach.png");
-		if (t > 9.0)
+		t += difficulte * 0.025;
+		if (t >= 8.997)
 		{
 			t = 1.0;
 		}
-		t += difficulte * 0.025;
+		
 	}
 	// Avancement du train
 	train->faireAvancerTrain();
@@ -295,28 +295,31 @@ void scene_structure::display()
 	}
 	//gestion des Inputs en mode racing
 	float pressForward = 0;
-	if (keyboard.up)
+	if (timer.t > 30 * camera + 2.9)
 	{
-		avancementKart += 0.03;
-		//std::cout << avancementKart << std::endl;
-		pressForward = 1;
-	}
-	if (keyboard.down)
-	{
-		avancementKart -= 0.03;
-		pressForward = -1;
-	}
-	if (keyboard.right)
-	{
-		kartDep->updateOrientationKart(true);
-	}
-	else if (keyboard.left)
-	{
-		kartDep->updateOrientationKart(false);
-	}
-	if (keyboard.ctrl)
-	{
-		pressForward = 2;
+		if (keyboard.up)
+		{
+			avancementKart += 0.03;
+			//std::cout << avancementKart << std::endl;
+			pressForward = 1;
+		}
+		if (keyboard.down)
+		{
+			avancementKart -= 0.03;
+			pressForward = -1;
+		}
+		if (keyboard.right)
+		{
+			kartDep->updateOrientationKart(true);
+		}
+		else if (keyboard.left)
+		{
+			kartDep->updateOrientationKart(false);
+		}
+		if (keyboard.ctrl)
+		{
+			pressForward = 2;
+		}
 	}
 	kartDep->udpatePositionKart(pressForward,0.1,tabKart,accelerationMoteur);
 	kartDep->kart.update_local_to_global_coordinates();
