@@ -133,7 +133,7 @@ void scene_structure::initialize()
 	kartDep = new Kart("kartMario", "assets/personnages/sigleBowser.png", 1.2, 0.4, 0.15, 3.0, vec3(0.1, 0.1, 0.1), vec3(1.0, 0, 0.0), vec3(3.0 * disc_radius / 5.0 , racetrack_length/5.0, 0));
 	keyframe.initialize(key_positions, key_times);
 
-	int N = key_times.size();
+	decompte.initialize(mesh_primitive_disc(4, { disc_radius / 2.0,0.8 * racetrack_length / 2.0,6 }, { 0,1,0 }));
 	timer.start();
 	t = 1.001;
 }
@@ -245,13 +245,34 @@ void scene_structure::display()
 	
 	// Gestion du timer
 	timer.update();
-	std::cout << timer.t << std::endl;
-	if (timer.t < 33.0 && camera)
+	if (timer.t > 30 * camera + 5.0)
+	{
+		racetrack["departure_sign2"].drawable.texture = opengl_load_texture_image("assets/logo.png");
+	}
+	else if (timer.t > 30 * camera + 3.1)
+	{
+		racetrack["departure_sign2"].drawable.texture = opengl_load_texture_image("assets/decompte/go.png");
+	}
+	else if (timer.t > 30 * camera + 2.1)
+	{
+		racetrack["departure_sign2"].drawable.texture = opengl_load_texture_image("assets/decompte/1.png");
+	}
+	else if (timer.t > 30 * camera + 1.1)
+	{
+		racetrack["departure_sign2"].drawable.texture = opengl_load_texture_image("assets/decompte/2.png");
+	}
+	else if (timer.t > 30 * camera + 0.1)
+	{
+		racetrack["departure_sign2"].drawable.texture = opengl_load_texture_image("assets/decompte/3.png");
+	}
+	
+	if (timer.t < 30 * camera + 3)
 	{
 		t = 1.1;
 	}
 	else
 	{
+		kartDep->kart["kartPupitre"].drawable.texture = opengl_load_texture_image("assets/personnages/siglePeach.png");
 		if (t > 9.0)
 		{
 			t = 1.0;
@@ -306,7 +327,6 @@ void scene_structure::display()
 
 void scene_structure::display_gui()
 {
-	ImGui::Checkbox("Frame", &gui.display_frame);
 	ImGui::Checkbox("Drift", &gui.drift);
 	ImGui::Checkbox("vuePeach", &gui.vuePeach);
 	ImGui::SliderFloat("accelerationMoteur", &accelerationMoteur, 0.0f, 10.0f);
