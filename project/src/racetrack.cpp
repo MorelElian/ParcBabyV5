@@ -20,7 +20,7 @@ int turn_resolution = 5;
 float departure_height = 2.5;
 float departure_thickness = 0.7;
 float departure_radius = 2;
-float sign_height = departure_height;
+float sign_height = 1.3*departure_height;
 
 float tube_height = 12;
 float tube_thickness = 1;

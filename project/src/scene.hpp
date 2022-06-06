@@ -55,6 +55,9 @@ struct scene_structure {
 	Kart* kartMario;
 	Kart* kartDep;
 	cgp::hierarchy_mesh_drawable kartLuigi;
+
+	int nb_wagon;
+	float delta;
 	cgp::mesh_drawable rollercoaster;
 	
 	Train* train;
@@ -74,6 +77,9 @@ struct scene_structure {
 	
 	void update_cameraPresentationA();
 	void update_cameraPresentationB();
+	void update_cameraPresentationC();
+	void update_cameraPresentationD();
+	void update_cameraPresentationE();
 
 	void update_cameraManuelle();
 	void update_cameraArriereManuelle();
@@ -93,7 +99,9 @@ struct scene_structure {
 
 	Trajectoire tCameraA;
 	Trajectoire tCameraB;
-
+	Trajectoire tCameraC;
+	Trajectoire tCameraD;
+	Trajectoire tCameraE;
 	//double avancement_update = 1.0;
 
 };

@@ -24,8 +24,9 @@ class Wagon
 
 class Train{
     public:
-        Train(int _nb_wagon, Trajectoire trajectoire);
+        Train(int _nb_wagon, Trajectoire trajectoire, float _delta);
         int nb_wagon;
         Wagon* train;
+        float delta;
         void faireAvancerTrain();
 };
