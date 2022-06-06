@@ -63,10 +63,10 @@ void Kart::faireAvancerKart(float t, Trajectoire traj)
 	orientationKart = (p - p_prec) / norm(p - p_prec);
 	kart["baseKart"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
 	kart["baseKart"].transform.translation = p;
-	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * traj.timer.t);
-	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * traj.timer.t);
-	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * traj.timer.t);
-	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * traj.timer.t);
+	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
+	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
+	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
+	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
 }
 void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 {
@@ -127,7 +127,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 		accelerationMoteur = 0;
 	}
 	accelerationKart = accelerationMoteur*orientationKart - 0.5 * vitesseKart;
-	for (int i = 0; i < 3; i++)
+	for (int i = 0; i < 4; i++)
 	{
 		
 		accelerationKart += detecterCollisionKart(tabKart[i]);

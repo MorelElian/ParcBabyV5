@@ -19,6 +19,7 @@
 struct gui_parameters {
 	bool display_frame = true;
 	bool drift = false;
+	bool vueMario = false;
 };
 
 
@@ -48,20 +49,39 @@ struct scene_structure {
 
 	// Timer used for the interpolation of the position
 	cgp::timer_basic timer;
-	float t;
 	cgp::mesh_drawable terrain;
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;
-	Kart* kartMario;
-	Kart* kartDep;
-	cgp::hierarchy_mesh_drawable kartLuigi;
-
-	int nb_wagon;
-	float delta;
 	cgp::mesh_drawable rollercoaster;
-	
+	Kart* tabKart;
+	Kart kartMario;
+	Kart* kartDep;
 	Train* train;
 	Trajectoire traj_wagon;
+	Trajectoire traj_mario;
+	Trajectoire tCameraA;
+	Trajectoire tCameraB;
+	Trajectoire tCameraC;
+	Trajectoire tCameraD;
+	Trajectoire tCameraE;
+	Trajectoire* tabTrajectoire;
+	int nb_wagon;
+	float delta;
+	float t;
+	cgp::buffer<float> key_times;
+	cgp::buffer<float> key_times_mario;
+	cgp::buffer<cgp::vec3> key_positions;
+	cgp::buffer<cgp::vec3> key_positions_mario;
+	cgp::buffer<cgp::vec3> key_derivee;
+	cgp::buffer<float> key_times2;
+	bool camera = false;
+
+	float avancementKart = 1.011;
+	float avancementPrecedent = 1.1;
+
+	int nTraj = 4;
+	bool vueMario = false;
+	
 
 
 
@@ -83,25 +103,9 @@ struct scene_structure {
 
 	void update_cameraManuelle();
 	void update_cameraArriereManuelle();
-	bool update_camera_actif = false;
-	cgp::buffer<float> key_times;
-	cgp::buffer<float> key_times_mario;
-	cgp::buffer<cgp::vec3> key_positions;
-	cgp::buffer<cgp::vec3> key_positions_mario;
-	cgp::buffer<cgp::vec3> key_derivee;
-	cgp::buffer<float> key_times2;
-	float avancementKart = 1.011;
-	float avancementPrecedent = 1.1;
-	Kart* tabKart;
-	int nTraj = 3;
-	Trajectoire *tabTrajectoire;
-	const char** tabNomTraj[3];
+	
 
-	Trajectoire tCameraA;
-	Trajectoire tCameraB;
-	Trajectoire tCameraC;
-	Trajectoire tCameraD;
-	Trajectoire tCameraE;
+	
 	//double avancement_update = 1.0;
 
 };

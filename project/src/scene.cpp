@@ -37,13 +37,11 @@ using namespace cgp;
 void scene_structure::initialize()
 {
 	// Basic set-up
-	// global_frame.initialize(mesh_primitive_frame(), "Frame");
+	
 	
 	environment.camera.axis = camera_spherical_coordinates_axis::z;
 	environment.camera.look_at({ 2.0f,-4.0f,2.0f }, { 0,0,0 });
 	global_frame.initialize(mesh_primitive_frame(), "Frame");
-	//environment.camera.position_camera = { disc_radius/2.0, 0.6 * racetrack_length/2.0, 5.0f };
-	//environment.camera.manipulator_rotate_roll_pitch_yaw(-Pi/2.0, Pi/2.0, Pi/2.0);
 	
 	mesh const terrain_mesh = create_terrain_mesh();
 	terrain.initialize(terrain_mesh, "terrain");
@@ -104,7 +102,8 @@ void scene_structure::initialize()
 
 	tCameraE = Trajectoire("tCameraE", key_positions_camE, key_times_camE, interpolation);
 	
-	//Initialisation trajectoires
+	//INITIALISATION KARTS ET TRAJECTOIRES
+
 	tabTrajectoire = new Trajectoire[nTraj];
 	tabKart = new Kart[nTraj];
 	buffer<vec3> key_positions_luigi = trajLuigi();
@@ -113,13 +112,12 @@ void scene_structure::initialize()
 	tabKart[0] = Kart("kartLuigi", "assets/personnages/sigleLuigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.0, 1.0, 0), vec3(1, 1, 1.0));
 
 	key_positions = trajWaluigi();
-	key_times = { 0.0f, 1.0f, 1.6f, 2.4f, 3.2f, 4.0f, 4.6f, 6.0f, 6.8f, 7.6f,9.0f,10.0f};
+	key_times = { 0.0f, 1.0f, 1.5f, 2.2f, 3.2f, 4.0f, 4.6f, 6.0f, 6.8f, 7.6f,9.0f,10.0f};
 	tabTrajectoire[1] = Trajectoire("TrajWaluigi", key_positions, key_times, interpolation);
 	tabKart[1] = Kart("kartWaluigi", "assets/personnages/sigleWaluigi.jpg", 1.2, 0.4, 0.15, 3.0, vec3(0.4, 0.0, 0.8), vec3(1, 1, 0.0));
 
 	key_positions_mario = trajMario();
-	std::cout << key_positions_mario.size() << std::endl;
-	key_times_mario = { 0.0f, 1.0f, 1.8f, 2.7f, 4.0f, 5.0f, 6.0f, 6.7f, 7.8f, 8.5,9.0f,10.0f};
+	key_times_mario = { 0.0f, 1.0f, 1.8f, 2.7f, 4.0f, 4.8f, 6.0f, 6.7f, 7.8f, 8.5,9.0f,10.0f};
 
 
 	key_positions = trajPeach();
@@ -127,50 +125,43 @@ void scene_structure::initialize()
 	tabTrajectoire[2] = Trajectoire("TrajPeach", key_positions, key_times, interpolation);
 	tabKart[2] = Kart("kartPeach", "assets/personnages/siglePeach.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.4, 1.0), vec3(1, 1, 0.0));
 
-	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
+	kartMario = Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
+	traj_mario = Trajectoire("t1", key_positions_mario, key_times_mario, interpolation);
+	tabTrajectoire[3] = traj_mario;
+	tabKart[3] = kartMario;
 
 	kartDep = new Kart("kartMario", "assets/personnages/sigleBowser.png", 1.2, 0.4, 0.15, 3.0, vec3(0.1, 0.1, 0.1), vec3(1.0, 0, 0.0), vec3(3.0 * disc_radius / 5.0 , racetrack_length/5.0, 0));
-	// Key 3D positions
-
-	// Initialize the helping structure to display/interact with these positions
 	keyframe.initialize(key_positions, key_times);
 
 	int N = key_times.size();
 	timer.start();
 	t = 1.001;
 }
-
-void scene_structure::update_camera()
+/// <summary>
+///  fonctions pour l'usage des caméras
+/// </summary>
+void scene_structure::update_camera() // utiliser lorsque le mode "demo" est en route.
 {
 
-	// The camera moves forward all the time
-	//   We consider in this example a constant velocity, so the displacement is: velocity * dt * front-camera-vector
 	float const dt = timer.update();
-	update_camera_actif = true;
-	//vec3 const forward_displacement = 0;
-	//camera.position_camera += forward_displacement;
-	// camera.position_camera += (dt, dt, dt);
-	//camera.manipulator_rotate_trackball({ 0,0 }, { dt,dt });
-	float compteur = 0;
-	float t = timer.t;
-	vec3 p = interpolation(avancementKart, key_positions_mario, key_times_mario);
-	vec3 p_prec = interpolation(avancementKart - 0.001, key_positions_mario, key_times_mario);
+
+	vec3 p = interpolation(t, key_positions_mario, key_times_mario);
+	vec3 p_prec = interpolation(t - 0.001, key_positions_mario, key_times_mario);
 	vec3 posCamera = p - (p - p_prec) / norm(p - p_prec) * 8 + vec3(-0.5, 0, 3);
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
 
-void scene_structure::update_cameraManuelle()
+void scene_structure::update_cameraManuelle() // Mode "Race"
 {
 	float compteur = 0;
-	float t = timer.t;
 	vec3 p = kartDep->positionKart;
 	vec3 orient = kartDep->orientationKart;
 	vec3 posCamera = p  - 7 * orient + vec3(0,0,2);
-	vec3 regardCamera = p + vec3(0, 0, 2.0);
+	vec3 regardCamera = p + orient  * 2 + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
-void scene_structure::update_cameraArriere()
+void scene_structure::update_cameraArriere() // mode "Demo" Camera Arriere
 {
 
 	vec3 p = interpolation(avancementKart, key_positions_mario, key_times_mario);
@@ -179,15 +170,15 @@ void scene_structure::update_cameraArriere()
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
-void scene_structure::update_cameraArriereManuelle()
+void scene_structure::update_cameraArriereManuelle() // mode "Race" Camera Arriere
 {
-
 	vec3 p = kartDep->positionKart;
 	vec3 orient = kartDep->orientationKart;
 	vec3 posCamera = p + 7 * orient + vec3(0, 0, 2);
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
+// camera pour la présentaion
 void scene_structure::update_cameraPresentationA()
 {
 	vec3 posCameraPres = tCameraA.positionKart(1);
@@ -226,7 +217,7 @@ void scene_structure::display()
 	inputs_keyboard_parameters const& keyboard = inputs.keyboard;
 	environment.light = environment.camera.position();
 	draw(skybox, environment);
-	
+	// Gestion de la box de paramètres
 	if (gui.display_frame)
 		draw(global_frame, environment);
 	if (gui.drift)
@@ -237,23 +228,27 @@ void scene_structure::display()
 	{
 		kartDep->drift = false;
 	}
+	if (gui.vueMario)
+	{
+		vueMario = true;
+	}
+	else
+	{
+		vueMario = false;
+	}
+
+	// terrain et piste
 	terrain.transform.translation = {0,0, -2*pilar_height};
 	racetrack.update_local_to_global_coordinates();
-	
-	
-	//float racetrack_incline = M_PI/12.0;
-	//racetrack["racetrack1"].transform.translation = {0,0,evaluate_terrain_height(0, 0) + pilar_height};
-	//racetrack["racetrack_pivot1"].transform.rotation = cgp::rotation_transform::from_axis_angle({1,0,0}, -racetrack_incline);
-	//racetrack["racetrack1"].transform.rotation = cgp::rotation_transform::from_axis_angle({1,0,0}, racetrack_incline);
 
 	draw(terrain, environment);
 	draw(racetrack, environment);
 	draw(rollercoaster, environment);
 	
-	// Update the current time
+	// Gestion du timer
 	timer.update();
 	std::cout << timer.t << std::endl;
-	if (timer.t < 33.0)
+	if (timer.t < 33.0 && camera)
 	{
 		t = 1.1;
 	}
@@ -265,32 +260,21 @@ void scene_structure::display()
 		}
 		t += 0.025;
 	}
+	// Avancement du train
 	train->faireAvancerTrain();
 	for(int i = 0; i < train->nb_wagon; i++){
-		//std::cout << typeid(train[i]) << endl;
 		draw(train->train[i].wagon, environment);
 	}
 	
-
-	// clear trajectory when the timer restart
-	//if (t < timer.t_min + 0.1f)
-	//	keyframe.trajectory.clear();
-
-	// Compute the interpolated position
-	//  This is this function that you need to complete
-	//vec3 p = interpolation_hermite(t, keyframe.key_positions, keyframe.key_times, key_derivee);
-	//vec3 p_p = derivee_hermite(t, keyframe.key_positions, keyframe.key_times,key_derivee);
 	
-	Trajectoire t1("t1",key_positions_mario,key_times_mario, interpolation);
-	kartMario->faireAvancerKart(t, t1);
-	kartMario->kart.update_local_to_global_coordinates();
+	// avancement des karts
     for (int i = 0; i < nTraj; i++)
 	{
 		tabKart[i].faireAvancerKart(t, tabTrajectoire[i]);
 		tabKart[i].kart.update_local_to_global_coordinates();
 		draw(tabKart[i].kart, environment);
 	}
-	draw(kartMario->kart, environment);
+	//gestion des Inputs en mode racing
 	float pressForward = 0;
 	if (keyboard.up)
 	{
@@ -323,9 +307,6 @@ void scene_structure::display()
 	kartDep->udpatePositionKart(pressForward,0.1,tabKart);
 	kartDep->kart.update_local_to_global_coordinates();
 	draw(kartDep->kart, environment);
-	//draw(kartLuigi, environment);
-	
-	//keyframe.display_current_position(interpolation(avancementKart, keyframe.key_positions, keyframe.key_times), environment);
 	
 }
 
@@ -334,6 +315,7 @@ void scene_structure::display_gui()
 {
 	ImGui::Checkbox("Frame", &gui.display_frame);
 	ImGui::Checkbox("Drift", &gui.drift);
+	ImGui::Checkbox("vueMario", &gui.vueMario);
 	//ImGui::SliderFloat("Time scale", &timer.scale, 0.0f, 2.0f);
 	//ImGui::SliderFloat("Particle emission", &timer.event_period, 0.1f, 2.0f);
 }
