@@ -30,6 +30,7 @@ struct scene_structure {
 	// ****************************** //
 
 	cgp::mesh_drawable global_frame;          // The standard global frame
+	cgp::mesh_drawable decompte;
 	cgp::scene_environment_basic_camera_spherical_coords environment; // Standard environment controler
 	//scene_environment_camera_head environment;
 	cgp::inputs_interaction_parameters inputs; // Storage for inputs status (mouse, keyboard, window dimension)
@@ -66,7 +67,7 @@ struct scene_structure {
 	cgp::buffer<cgp::vec3> key_positions_mario;
 	cgp::buffer<cgp::vec3> key_derivee;
 	cgp::buffer<float> key_times2;
-	bool camera = false;
+	bool camera = true;
 
 	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
