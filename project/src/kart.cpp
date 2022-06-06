@@ -1,5 +1,9 @@
 #include "kart.h"
 #include "elementar.hpp"
+#include "racetrack.hpp"
+float extern disc_radius;
+float extern turn_radius;
+float extern racetrack_length;
 using namespace cgp;
 Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2)
 {
@@ -16,7 +20,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	dimension_volant = 0.275 * largeur_kart;
 	largeur_roue_avant = 0.15 * proportion;
 	kart = create_kart(longueur_kart, largeur_kart, hauteur_kart, proportion, color1, color2, nFileFrontKart);
-	hitbox = 2.0;
+	hitbox = 1.7;
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2,vec3 _positionKart)
@@ -46,7 +50,7 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	signeAvancement = 1.0;
 	turboUtilise = false;
 	drift = false;
-	hitbox = 2.0;
+	hitbox = 1.7;
 	//Element Proche de la base du kart
 	
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
@@ -131,7 +135,12 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 }
 void Kart::updateVitesseKart(float dt)
 {
-	if (drift || collision)
+	if (norm(detecterCollisionBarriere()) > 0)
+	{
+		vitesseKart = detecterCollisionBarriere();
+		
+	}
+	else if (drift || collision)
 	{
 		vitesseKart = vitesseKart + dt * accelerationKart;
 	}
@@ -143,6 +152,7 @@ void Kart::updateVitesseKart(float dt)
 		vitesseKart.y = scal * orientationKart.y;
 		vitesseKart.z = scal * orientationKart.z;
 	}
+
 	
 }
 void Kart::udpatePositionKart(float pressForward,float dt,Kart* tabKart)
@@ -188,7 +198,7 @@ void Kart::updateOrientationKart(bool droite)
 	}
 	else
 	{
-		mat3 rotation = { {std::cos(direction* norm(vitesseKart) * 0.2),std::sin(direction * norm(vitesseKart) * 0.2),0},
+		mat3 rotation = { {std::cos(direction * norm(vitesseKart) * 0.2),std::sin(direction * norm(vitesseKart) * 0.2),0},
 			{-std::sin(direction * norm(vitesseKart) * 0.2),std::cos(direction * norm(vitesseKart) * 0.2),0},{0,0,1} };
 		orientationKart = rotation * orientationKart;
 	}
@@ -199,12 +209,12 @@ buffer<vec3> Kart::volumeEnglobant()
 		{0,1,0},
 		{-1,0,0},
 		{0,0,1} };
-	vec3 orthoOrient = rot90 * orientationKart ;
+	vec3 orthoOrient = rot90 * orientationKart;
 	buffer<vec3> volumeEnglobant = {
-		positionKart + hitbox * longueur_kart / 2.0  * orientationKart - hitbox * orthoOrient * largeur_kart / 2.0,
-		positionKart + hitbox * longueur_kart / 2.0*orientationKart + hitbox * orthoOrient * largeur_kart / 2.0,
-		positionKart - hitbox * longueur_kart / 2.0 * orientationKart + hitbox * orthoOrient * largeur_kart / 2.0,
-		positionKart - hitbox * longueur_kart / 2.0 * orientationKart - hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart + hitbox * longueur_kart / 2.0 * orientationKart - 1.2 * hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart + hitbox * longueur_kart / 2.0 * orientationKart + 1.2 * hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart - hitbox * longueur_kart / 2.0 * orientationKart + 1.2 * hitbox * orthoOrient * largeur_kart / 2.0,
+		positionKart - hitbox * longueur_kart / 2.0 * orientationKart - 1.2 * hitbox * orthoOrient * largeur_kart / 2.0,
 	};
 	return volumeEnglobant;
 
@@ -215,6 +225,7 @@ buffer<vec3> Kart::getRepereAssocie()
 		{0,1,0},
 		{-1,0,0},
 		{0,0,1} };
+
 	vec3 orthoOrient = rot90 * orientationKart;
 	return buffer<vec3>({ orientationKart,orthoOrient });
 }
@@ -224,20 +235,20 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 	buffer<vec3> repereAdverse = kartAdverse.getRepereAssocie();
 	float projOrient = 0.0;
 	float projOrientOrtho = 0.0;
-	vec3 directionForce = vec3(0,0,0);
+	vec3 directionForce = vec3(0, 0, 0);
 	for (int i = 0; i < 4; i++)
 	{
 		vec3 a = volumeEnglobant[i] - kartAdverse.positionKart;
 		projOrient = a.x * repereAdverse[0].x + a.y * repereAdverse[0].y + a.z * repereAdverse[0].z;
 		projOrientOrtho = a.x * repereAdverse[1].x + a.y * repereAdverse[1].y + a.z * repereAdverse[1].z;
-		if (!(std::abs(projOrient) > hitbox*longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox* largeur_kart / 2.0))
+		if (!(std::abs(projOrient) > hitbox * longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox * largeur_kart / 2.0))
 		{
 
 			std::cout << kartAdverse.nomKart << std::endl;
 			std::cout << norm(kartAdverse.positionKart - positionKart) << std::endl;
 			collision = true;
-			directionForce = (positionKart - kartAdverse.positionKart) /norm(positionKart - kartAdverse.positionKart);
-			return 5.0 *  directionForce * 1/( 0.1 * norm(positionKart - kartAdverse.positionKart));
+			directionForce = (positionKart - kartAdverse.positionKart) / norm(positionKart - kartAdverse.positionKart);
+			return 5.0 * directionForce * 1 / (0.1 * norm(positionKart - kartAdverse.positionKart));
 		}
 	}
 	buffer<vec3> reperePropre = getRepereAssocie();
@@ -247,16 +258,59 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		vec3 a = volumeEnglobant[i] - positionKart;
 		projOrient = a.x * reperePropre[0].x + a.y * reperePropre[0].y + a.z * reperePropre[0].z;
 		projOrientOrtho = a.x * reperePropre[1].x + a.y * reperePropre[1].y + a.z * reperePropre[1].z;
-		if (!(std::abs(projOrient) > hitbox* longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox * largeur_kart / 2.0))
+		if (!(std::abs(projOrient) > hitbox * longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox * largeur_kart / 2.0))
 		{
 			std::cout << kartAdverse.nomKart << std::endl;
 			collision = true;
 			directionForce = (positionKart - kartAdverse.positionKart) / norm(positionKart - kartAdverse.positionKart);
-			return 5.0 * directionForce /( 0.1 *norm(positionKart - kartAdverse.positionKart));
+			return 5.0 * directionForce / (0.1 * norm(positionKart - kartAdverse.positionKart));
 		}
-		
+
 	}
 	return directionForce;
+}
+vec3 Kart::detecterCollisionBarriere()
+{
+	mat3 rot90 = {
+			{0,1,0},
+			{-1,0,0},
+			{0,0,1}
+	};
+	buffer<vec3> volumeEng = volumeEnglobant();
+	for (int i = 0; i < volumeEng.size(); i++)
+	{
+		vec3 point = volumeEng[i];
+		if (point.x > 0 && point.x < turn_radius && point.y > 0 && point.y < racetrack_length)
+		{
+			if (vitesseKart.x < 0)
+			{
+				return vec3(1, vitesseKart.y * 0.5, 0);
+			}
+		}
+		if (point.x > disc_radius && point.y > 0 && point.y < racetrack_length)
+		{
+			return vec3(-1.0, vitesseKart.y * 0.5, 0);
+
+		}
+		if (point.y > racetrack_length && norm(point - vec3(0, racetrack_length, 0)) > disc_radius)
+		{
+		vec3 radial = (point - vec3(-0, racetrack_length, 0)) / norm(point-vec3(0,racetrack_length,0));
+		std::cout << radial << std::endl;
+		
+		vec3 orthoradial = rot90 * radial;
+		return -radial + (orthoradial.x * vitesseKart.x + orthoradial.y * vitesseKart.y) * orthoradial;
+		}
+		if (point.y > racetrack_length && norm(point - vec3(0, racetrack_length, 0)) < turn_radius)
+		{
+			vec3 radial = (point - vec3(-0, racetrack_length, 0)) / norm(point - vec3(0, racetrack_length, 0));
+			std::cout << radial << std::endl;
+
+			vec3 orthoradial = rot90 * radial;
+			return radial + (orthoradial.x * vitesseKart.x + orthoradial.y * vitesseKart.y) * orthoradial;
+		}
+
+	}
+	return vec3(0,0,0);
 }
 
 hierarchy_mesh_drawable create_kart(float longueur_kart, float largeur_kart, float hauteur_kart, float proportion, vec3 color1, vec3 color2,const char *nFileFrontKart)

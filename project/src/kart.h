@@ -34,6 +34,7 @@ public:
 	void udpatePositionKart(float pressForward,float dt, Kart* tabKart);
 	void updateOrientationKart(bool droite);
 	vec3 detecterCollisionKart(Kart& kart);
+	vec3 detecterCollisionBarriere();
 	buffer<vec3> volumeEnglobant();
 	buffer<vec3> getRepereAssocie();
 protected:
