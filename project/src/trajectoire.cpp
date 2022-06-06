@@ -20,26 +20,15 @@ Trajectoire::Trajectoire(const char* _nomTrajectoire, buffer<vec3> _key_position
 }
 vec3 Trajectoire::positionKart(int deplacement)
 {
-	if ( deplacement == 2)
+	if(deplacement ==1)
 	{
-		
-		//std::cout << timer.t << std::endl;
-		//std::cout << "hello" << std::endl;
 		timer.update();
-		//std::cout << timer.t << std::endl;
 	}
-	else if (deplacement ==1)
-	{
-		//std::cout << " test" << std::endl;
-		
-		timer.update();
-		//std::cout << timer.t << std::endl;
-	}
-	//std::cout << timer.t << std::endl;
+	
 		return fonctionInterpolation(timer.t, key_positions, key_times);
 
 	
-	//std::cout << timer.t << std::endl;
+
 }
 vec3 Trajectoire::positionKart(float t)
 {
@@ -63,7 +52,6 @@ vec3 Trajectoire::positionKartPrec(float t)
 vec3 Trajectoire::positionWagon(float delta)
 {
 	timer.update();
-	//std::cout << timer.t + delta << std::endl;
 	float T = timer.t + delta;
 	if (T > timer.t_max){
 		T = T - (timer.t_max-timer.t_min);

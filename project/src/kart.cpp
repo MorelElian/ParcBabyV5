@@ -21,7 +21,6 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	largeur_roue_avant = 0.15 * proportion;
 	kart = create_kart(longueur_kart, largeur_kart, hauteur_kart, proportion, color1, color2, nFileFrontKart);
 	hitbox = 1.7;
-	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2,vec3 _positionKart)
 {
@@ -51,9 +50,6 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	turboUtilise = false;
 	drift = false;
 	hitbox = 1.7;
-	//Element Proche de la base du kart
-	
-	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
 void Kart::faireAvancerKart(float t, Trajectoire traj)
 {
@@ -68,7 +64,7 @@ void Kart::faireAvancerKart(float t, Trajectoire traj)
 	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
 	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
 }
-void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
+void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj) //fonction non utilisée
 {
 	float t_max = traj.key_times[traj.nPoints-2];
 	float t_min = traj.key_times[1];
@@ -88,9 +84,6 @@ void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 	vec3 p_prec = interpolation(avancement - 0.01, traj.key_positions, traj.key_times);
 	positionKart = p;
 	orientationKart = (p - p_prec) / norm(p - p_prec);
-	//vec3 p_p = derivee_interpolation(avancement, traj.key_positions, traj.key_times);
-	//vec3 p_p_prec = derivee_interpolation(avancementPrec, traj.key_positions, traj.key_times);
-	//kart["baseKart"].transform.rotation =  kart["baseKart"].transform.rotation * rotation_transform::between_vector(p_p_prec / norm(p_p_prec),p_p / norm(p_p));
 
 	kart["baseKartTheorique"].transform.rotation = rotation_transform::between_vector({ 1.0,0.0,0.0 }, (p - p_prec) / norm(p - p_prec));
 	kart["baseKartTheorique"].transform.translation = p;
@@ -171,7 +164,6 @@ void Kart::udpatePositionKart(float pressForward,float dt,Kart* tabKart,float _a
 	angleRoueAvant += signeAvancement * dt * norm(vitesseKart) / hauteur_kart;
 	angleRoueArriere += signeAvancement * dt * norm(vitesseKart) / hauteur_kart;
 	tempsDuKart += dt;
-	//std::cout <<positionKart <<std::endl;
 	kart["baseKartTheorique"].transform.translation = positionKart;
 	kart["baseKartTheorique"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0),orientationKart / norm(orientationKart));
 	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, angleRoueAvant);
@@ -243,9 +235,6 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		projOrientOrtho = a.x * repereAdverse[1].x + a.y * repereAdverse[1].y + a.z * repereAdverse[1].z;
 		if (!(std::abs(projOrient) > hitbox * longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox * largeur_kart / 2.0))
 		{
-
-			std::cout << kartAdverse.nomKart << std::endl;
-			std::cout << norm(kartAdverse.positionKart - positionKart) << std::endl;
 			collision = true;
 			directionForce = (positionKart - kartAdverse.positionKart) / norm(positionKart - kartAdverse.positionKart);
 			return 5.0 * directionForce * 1 / (0.1 * norm(positionKart - kartAdverse.positionKart));
@@ -260,7 +249,6 @@ vec3 Kart::detecterCollisionKart(Kart& kartAdverse)
 		projOrientOrtho = a.x * reperePropre[1].x + a.y * reperePropre[1].y + a.z * reperePropre[1].z;
 		if (!(std::abs(projOrient) > hitbox * longueur_kart / 2.0 || std::abs(projOrientOrtho) > hitbox * largeur_kart / 2.0))
 		{
-			std::cout << kartAdverse.nomKart << std::endl;
 			collision = true;
 			directionForce = (positionKart - kartAdverse.positionKart) / norm(positionKart - kartAdverse.positionKart);
 			return 5.0 * directionForce / (0.1 * norm(positionKart - kartAdverse.positionKart));

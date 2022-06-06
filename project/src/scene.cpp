@@ -297,11 +297,6 @@ void scene_structure::display()
 	{
 		pressForward = 2;
 	}
-	else
-	{
-		//kartDep->drift = false;
-	}
-	//std::cout << pressForward << std::endl;
 	kartDep->udpatePositionKart(pressForward,0.1,tabKart,accelerationMoteur);
 	kartDep->kart.update_local_to_global_coordinates();
 	draw(kartDep->kart, environment);
@@ -316,7 +311,6 @@ void scene_structure::display_gui()
 	ImGui::Checkbox("vuePeach", &gui.vuePeach);
 	ImGui::SliderFloat("accelerationMoteur", &accelerationMoteur, 0.0f, 10.0f);
 	ImGui::SliderFloat("niveau", &difficulte, 0.0f, 2.0f);
-	//ImGui::SliderFloat("Particle emission", &timer.event_period, 0.1f, 2.0f);
 }
 
 
