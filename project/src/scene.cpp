@@ -233,6 +233,10 @@ void scene_structure::display()
 	{
 		kartDep->drift = true;
 	}
+	else
+	{
+		kartDep->drift = false;
+	}
 	terrain.transform.translation = {0,0, -2*pilar_height};
 	racetrack.update_local_to_global_coordinates();
 	
@@ -259,7 +263,7 @@ void scene_structure::display()
 		{
 			t = 1.0;
 		}
-		t += 0.03;
+		t += 0.025;
 	}
 	train->faireAvancerTrain();
 	for(int i = 0; i < train->nb_wagon; i++){
@@ -309,11 +313,11 @@ void scene_structure::display()
 	}
 	if (keyboard.ctrl)
 	{
-		kartDep->drift = true;
+		pressForward = 2;
 	}
 	else
 	{
-		kartDep->drift = true;
+		//kartDep->drift = false;
 	}
 	//std::cout << pressForward << std::endl;
 	kartDep->udpatePositionKart(pressForward,0.1,tabKart);
