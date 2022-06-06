@@ -73,17 +73,18 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 
 
     //PISTE
-	disc1.initialize(mesh_primitive_disc(disc_radius), "disc");
+	disc1.initialize(mesh_primitive_disc_bis(disc_radius, {0,0,0}, {0,0,1}, 50, 2), "disc");
 	disc1.texture = opengl_load_texture_image("assets/pisteBleue.png", GL_REPEAT, GL_REPEAT);
 
-	disc2.initialize(mesh_primitive_disc(disc_radius), "disc2");
+	disc2.initialize(mesh_primitive_disc_bis(disc_radius, {0,racetrack_length,0}, {0,0,1}, 50, 2), "disc2");
 	disc2.texture = opengl_load_texture_image("assets/pisteRouge.png", GL_REPEAT, GL_REPEAT);
 
 	mesh racetrack_mesh = mesh_primitive_quadrangle({ -disc_radius,0,0 }, { disc_radius,0,0 }, { disc_radius,racetrack_length/2.0f,0 }, { -disc_radius,racetrack_length/2.0f,0 });
 	racetrack1.initialize(racetrack_mesh, "racetrack1");
 	racetrack1.texture = opengl_load_texture_image("assets/pisteBleue.png", GL_REPEAT, GL_REPEAT);
 
-	racetrack2.initialize(racetrack_mesh, "racetrack2");
+	mesh racetrack2_mesh = mesh_primitive_quadrangle({ -disc_radius,racetrack_length/2.0f,0 }, { disc_radius,racetrack_length/2.0f,0 }, { disc_radius,racetrack_length,0 }, { -disc_radius,racetrack_length,0 });
+	racetrack2.initialize(racetrack2_mesh, "racetrack2");
 	racetrack2.texture = opengl_load_texture_image("assets/pisteRouge.png", GL_REPEAT, GL_REPEAT);
 
 	mesh thickness1_mesh = mesh_primitive_cylinder(racetrack_thickness,{disc_radius,0,0},{disc_radius,racetrack_length,0});
@@ -200,7 +201,7 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	//PISTE 
 	racetrack.add(racetrack1);
 
-	racetrack2.transform.translation = {0,racetrack_length/2.0f,0};
+	// racetrack2.transform.translation = {0,racetrack_length/2.0f,0};
 	racetrack.add(racetrack2, "racetrack1");
 
 	racetrack1.name = "racetrack3";
@@ -208,21 +209,22 @@ cgp::hierarchy_mesh_drawable create_racetrack_mesh_drawable(){
 	racetrack.add(racetrack1, "racetrack1");
 
 	racetrack2.name = "racetrack4";
-	racetrack2.transform.translation = {0,racetrack_length/2.0f,-2*racetrack_thickness};
+	racetrack2.transform.translation = {0,0,-2*racetrack_thickness};
 	racetrack.add(racetrack2, "racetrack1");
 
+	disc1.transform.rotation = cgp::rotation_transform::from_axis_angle({ 0,0,1 }, M_PI);
 	racetrack.add(disc1, "racetrack1");
 	
-	disc2.transform.translation = {0,racetrack_length,0};
 	racetrack.add(disc2, "racetrack1");
 
-	disc1.transform.translation = {0,racetrack_length,-2*racetrack_thickness};
+	disc1.transform.rotation = cgp::rotation_transform::from_axis_angle({ 0,0,1 }, M_PI);
+	disc1.transform.translation = {0,0,-2*racetrack_thickness};
 	disc1.name = "disc3";
 	racetrack.add(disc1, "racetrack1");
 
-	disc1.transform.translation = {0,0,-2*racetrack_thickness};
-	disc1.name = "disc4";
-	racetrack.add(disc1, "racetrack1");
+	disc2.transform.translation = {0,0,-2*racetrack_thickness};
+	disc2.name = "disc4";
+	racetrack.add(disc2, "racetrack1");
 
 	thickness1.transform.translation = {0,0,-racetrack_thickness};
 	thickness1.shading.color = grey;
