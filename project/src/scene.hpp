@@ -47,8 +47,8 @@ struct scene_structure {
 	keyframe_structure keyframe;
 
 	// Timer used for the interpolation of the position
-	cgp::timer_interval timer;
-
+	cgp::timer_basic timer;
+	float t;
 	cgp::mesh_drawable terrain;
 	cgp::skybox_drawable skybox;
 	cgp::hierarchy_mesh_drawable racetrack;

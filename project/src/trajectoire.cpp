@@ -41,6 +41,10 @@ vec3 Trajectoire::positionKart(int deplacement)
 	
 	//std::cout << timer.t << std::endl;
 }
+vec3 Trajectoire::positionKart(float t)
+{
+	return fonctionInterpolation(t, key_positions, key_times);
+}
 vec3 Trajectoire::positionKart()
 {
 	timer.update();
@@ -50,6 +54,10 @@ vec3 Trajectoire::positionKart()
 vec3 Trajectoire::positionKartPrec()
 {
 	return fonctionInterpolation(timer.t - 0.001, key_positions,key_times);
+}
+vec3 Trajectoire::positionKartPrec(float t)
+{
+	return fonctionInterpolation(t - 0.001, key_positions, key_times);
 }
 
 vec3 Trajectoire::positionWagon(float delta)
