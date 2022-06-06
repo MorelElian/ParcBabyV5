@@ -19,7 +19,7 @@
 struct gui_parameters {
 	bool display_frame = true;
 	bool drift = false;
-	bool vueMario = false;
+	bool vuePeach = false;
 };
 
 
@@ -80,7 +80,7 @@ struct scene_structure {
 	float avancementPrecedent = 1.1;
 
 	int nTraj = 4;
-	bool vueMario = false;
+	bool vuePeach = false;
 	
 
 

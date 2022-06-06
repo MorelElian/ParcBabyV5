@@ -57,7 +57,6 @@ int main(int, char* argv[])
 		
 		// Display the ImGUI interface (button, sliders, etc)
 		scene.display_gui();
-
 		// Call the display of the scene
 		timerBase.update();
 
@@ -83,7 +82,7 @@ int main(int, char* argv[])
 		}
 		else if (!scene.inputs.keyboard.shift)
 		{
-			if (scene.vueMario)
+			if (scene.vuePeach)
 			{
 				scene.update_camera();
 			}

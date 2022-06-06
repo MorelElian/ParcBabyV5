@@ -143,12 +143,10 @@ void scene_structure::initialize()
 void scene_structure::update_camera() // utiliser lorsque le mode "demo" est en route.
 {
 
-	float const dt = timer.update();
-
-	vec3 p = interpolation(t, key_positions_mario, key_times_mario);
-	vec3 p_prec = interpolation(t - 0.001, key_positions_mario, key_times_mario);
-	vec3 posCamera = p - (p - p_prec) / norm(p - p_prec) * 8 + vec3(-0.5, 0, 3);
-	vec3 regardCamera = p + vec3(0, 0, 2.0);
+	vec3 p = tabTrajectoire[2].positionKart(t);
+	vec3 p_prec =tabTrajectoire[2].positionKartPrec(t);
+	vec3 posCamera = p - (p - p_prec) / norm(p - p_prec) * 6 + vec3(0, 0, 2);
+	vec3 regardCamera = p  +  vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
 
@@ -228,13 +226,13 @@ void scene_structure::display()
 	{
 		kartDep->drift = false;
 	}
-	if (gui.vueMario)
+	if (gui.vuePeach)
 	{
-		vueMario = true;
+		vuePeach = true;
 	}
 	else
 	{
-		vueMario = false;
+		vuePeach = false;
 	}
 
 	// terrain et piste
@@ -315,7 +313,7 @@ void scene_structure::display_gui()
 {
 	ImGui::Checkbox("Frame", &gui.display_frame);
 	ImGui::Checkbox("Drift", &gui.drift);
-	ImGui::Checkbox("vueMario", &gui.vueMario);
+	ImGui::Checkbox("vuePeach", &gui.vuePeach);
 	//ImGui::SliderFloat("Time scale", &timer.scale, 0.0f, 2.0f);
 	//ImGui::SliderFloat("Particle emission", &timer.event_period, 0.1f, 2.0f);
 }

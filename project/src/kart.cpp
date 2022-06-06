@@ -61,8 +61,8 @@ void Kart::faireAvancerKart(float t, Trajectoire traj)
 	vec3 p_prec = traj.positionKartPrec(t);
 	positionKart = p;
 	orientationKart = (p - p_prec) / norm(p - p_prec);
-	kart["baseKart"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
-	kart["baseKart"].transform.translation = p;
+	kart["baseKartTheorique"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
+	kart["baseKartTheorique"].transform.translation = p;
 	kart["ReAvtD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
 	kart["ReAvtG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 / 0.7 * t);
 	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * t);
