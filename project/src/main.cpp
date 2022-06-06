@@ -93,7 +93,14 @@ int main(int, char* argv[])
 		}
 		else
 		{
-			scene.update_cameraArriereManuelle();
+			if (scene.vuePeach)
+			{
+				scene.update_cameraArriere();
+			}
+			else
+			{
+				scene.update_cameraArriereManuelle();
+			}
 		}
 		scene.display();
 		

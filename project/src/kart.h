@@ -29,9 +29,9 @@ public:
 	Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_kart, float _largeur_kart, float _hauteur_kart, float _proportion, vec3 color1, vec3 color2, vec3 _positionKart);
 	void faireAvancerKart(float t, Trajectoire traj);
 	void faireAvancerKartManuel(float& avancement, Trajectoire traj);
-	void updateAccelerationKart(float pressForward, Kart* tabKart);
+	void updateAccelerationKart(float pressForward, Kart* tabKart,float _acccelerationMoteur);
 	void updateVitesseKart(float dt);
-	void udpatePositionKart(float pressForward,float dt, Kart* tabKart);
+	void udpatePositionKart(float pressForward,float dt, Kart* tabKart,float _accelerationMoteur);
 	void updateOrientationKart(bool droite);
 	vec3 detecterCollisionKart(Kart& kart);
 	vec3 detecterCollisionBarriere();

@@ -22,14 +22,6 @@ struct gui_parameters {
 	bool vuePeach = false;
 };
 
-
-// Structure of a particle
-struct particle_structure
-{
-	cgp::vec3 p; // Position
-	cgp::vec3 v; // Speed
-};
-
 // The structure of the custom scene
 struct scene_structure {
 	
@@ -78,7 +70,7 @@ struct scene_structure {
 
 	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
-
+	float accelerationMoteur = 6.0;
 	int nTraj = 4;
 	bool vuePeach = false;
 	

@@ -99,7 +99,7 @@ void Kart::faireAvancerKartManuel(float& avancement, Trajectoire traj)
 	kart["ReArD"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * avancement);
 	kart["ReArG"].transform.rotation = rotation_transform::from_axis_angle({ 0,1,0 }, 40 * avancement);
 }
-void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
+void Kart::updateAccelerationKart(float pressForward, Kart* tabKart,float _accelerationMoteur)
 {
 	//std::cout << pressForward << std::endl;
 	//std::cout << turboUtilise << std::endl;
@@ -107,7 +107,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 	float accelerationMoteur;
 	if (pressForward ==1)
 	{
-		accelerationMoteur = 6;
+		accelerationMoteur = _accelerationMoteur;
 	}
 	else if (pressForward == -1)
 	{
@@ -120,7 +120,7 @@ void Kart::updateAccelerationKart(float pressForward, Kart* tabKart)
 	}
 	else if (pressForward == 2)
 	{
-		accelerationMoteur = 6;
+		accelerationMoteur = _accelerationMoteur;
 	}
 	else
 	{
@@ -155,7 +155,7 @@ void Kart::updateVitesseKart(float dt)
 
 	
 }
-void Kart::udpatePositionKart(float pressForward,float dt,Kart* tabKart)
+void Kart::udpatePositionKart(float pressForward,float dt,Kart* tabKart,float _accelerationMoteur)
 {
 	if (pressForward == 1)
 	{
@@ -165,7 +165,7 @@ void Kart::udpatePositionKart(float pressForward,float dt,Kart* tabKart)
 	{
 		signeAvancement = -1.0;
 	}
-	updateAccelerationKart(pressForward,tabKart);
+	updateAccelerationKart(pressForward,tabKart,_accelerationMoteur);
 	updateVitesseKart(dt);
 	positionKart = dt * vitesseKart + positionKart;
 	angleRoueAvant += signeAvancement * dt * norm(vitesseKart) / hauteur_kart;

@@ -162,9 +162,9 @@ void scene_structure::update_cameraManuelle() // Mode "Race"
 void scene_structure::update_cameraArriere() // mode "Demo" Camera Arriere
 {
 
-	vec3 p = interpolation(avancementKart, key_positions_mario, key_times_mario);
-	vec3 p_prec = interpolation(avancementKart - 0.001,key_positions_mario, key_times_mario);
-	vec3 posCamera = p + (p - p_prec) / norm(p - p_prec) * 8 + vec3(0, 0, 3);
+	vec3 p = tabTrajectoire[2].positionKart(t);
+	vec3 p_prec = tabTrajectoire[2].positionKartPrec(t);
+	vec3 posCamera = p + (p - p_prec) / norm(p - p_prec) * 5 + vec3(0, 0, 3);
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
@@ -302,7 +302,7 @@ void scene_structure::display()
 		//kartDep->drift = false;
 	}
 	//std::cout << pressForward << std::endl;
-	kartDep->udpatePositionKart(pressForward,0.1,tabKart);
+	kartDep->udpatePositionKart(pressForward,0.1,tabKart,accelerationMoteur);
 	kartDep->kart.update_local_to_global_coordinates();
 	draw(kartDep->kart, environment);
 	
@@ -314,7 +314,7 @@ void scene_structure::display_gui()
 	ImGui::Checkbox("Frame", &gui.display_frame);
 	ImGui::Checkbox("Drift", &gui.drift);
 	ImGui::Checkbox("vuePeach", &gui.vuePeach);
-	//ImGui::SliderFloat("Time scale", &timer.scale, 0.0f, 2.0f);
+	ImGui::SliderFloat("Time scale", &accelerationMoteur, 0.0f, 10.0f);
 	//ImGui::SliderFloat("Particle emission", &timer.event_period, 0.1f, 2.0f);
 }
 
