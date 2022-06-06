@@ -31,6 +31,13 @@ vec3 p1 = {0.5*disc_radius, racetrack_length, tube_height/2.0f};
 vec3 p2 = {0, racetrack_length + 0.5*disc_radius, tube_height};
 vec3 p3 = {-0.5*disc_radius, racetrack_length, tube_height};
 vec3 p4 = {0, racetrack_length/2.0f, tube_height*3};
+
+//LOOPING
+vec3 p41 = {disc_radius/2.0f, racetrack_length/4.0f, tube_height*4};
+vec3 p42 = {disc_radius/2.0f, racetrack_length/2.0f, tube_height*5};
+vec3 p43 = {disc_radius/2.0f, 0.75f*racetrack_length, tube_height*4};
+vec3 p44 = {disc_radius/2.0f, 0.5f*racetrack_length, tube_height*3};
+
 vec3 p5 = {0, 0, tube_height*3};
 vec3 p6 = {0, -disc_radius*0.5, tube_height};
 vec3 p7 = {disc_radius, -disc_radius, 0};
@@ -38,8 +45,11 @@ vec3 p8 = {1.5*disc_radius, 0, tube_height*0.5f};
 vec3 p9 = {0, racetrack_length/4.0f, tube_height*2};
 vec3 p10 = {-disc_radius*0.5, racetrack_length/2.0f, tube_height*0.5f};
 
-buffer<vec3> key_positions_rc = { p10, start, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, start, p1};
-buffer<float> key_steps = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f };
+buffer<vec3> key_positions_rc = { p10, start, p1, p2, p3, p4, p41, p42, p43, p44, p5, p6, p7, p8, p9, p10, start, p1};
+buffer<float> key_steps = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f, 14.0f, 15.0f, 16.0f, 17.0f };
+
+// buffer<vec3> key_positions_rc = { p10, start, p1, p2, p3, p4, p5, p6, p7, p8, p9, p10, start, p1};
+// buffer<float> key_steps = { 0.0f, 1.0f, 2.0f, 3.0f, 4.0f, 5.0f, 6.0f, 7.0f, 8.0f, 9.0f, 10.0f, 11.0f, 12.0f, 13.0f };
 
 cgp::mesh_drawable create_rollercoaster_mesh_drawable(){
     cgp::mesh_drawable rollercoaster;
