@@ -306,7 +306,6 @@ void scene_structure::display()
 
 void scene_structure::display_gui()
 {
-	ImGui::Checkbox("Frame", &gui.display_frame);
 	ImGui::Checkbox("Drift", &gui.drift);
 	ImGui::Checkbox("vuePeach", &gui.vuePeach);
 	ImGui::SliderFloat("accelerationMoteur", &accelerationMoteur, 0.0f, 10.0f);
