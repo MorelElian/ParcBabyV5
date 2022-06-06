@@ -256,7 +256,7 @@ void scene_structure::display()
 		{
 			t = 1.0;
 		}
-		t += 0.025;
+		t += difficulte * 0.025;
 	}
 	// Avancement du train
 	train->faireAvancerTrain();
@@ -314,7 +314,8 @@ void scene_structure::display_gui()
 	ImGui::Checkbox("Frame", &gui.display_frame);
 	ImGui::Checkbox("Drift", &gui.drift);
 	ImGui::Checkbox("vuePeach", &gui.vuePeach);
-	ImGui::SliderFloat("Time scale", &accelerationMoteur, 0.0f, 10.0f);
+	ImGui::SliderFloat("accelerationMoteur", &accelerationMoteur, 0.0f, 10.0f);
+	ImGui::SliderFloat("niveau", &difficulte, 0.0f, 2.0f);
 	//ImGui::SliderFloat("Particle emission", &timer.event_period, 0.1f, 2.0f);
 }
 

@@ -71,6 +71,7 @@ struct scene_structure {
 	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
 	float accelerationMoteur = 6.0;
+	float difficulte = 1.0f;
 	int nTraj = 4;
 	bool vuePeach = false;
 	
