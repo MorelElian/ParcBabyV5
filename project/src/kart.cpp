@@ -303,12 +303,29 @@ vec3 Kart::detecterCollisionBarriere()
 		if (point.y > racetrack_length && norm(point - vec3(0, racetrack_length, 0)) < turn_radius)
 		{
 			vec3 radial = (point - vec3(-0, racetrack_length, 0)) / norm(point - vec3(0, racetrack_length, 0));
-			std::cout << radial << std::endl;
-
 			vec3 orthoradial = rot90 * radial;
 			return radial  + 0.6 * (orthoradial.x * vitesseKart.x + orthoradial.y * vitesseKart.y) * orthoradial;
 		}
-
+		if (point.y < racetrack_length && point.y > 0 && point.x < 0 && point.x > -turn_radius)
+		{
+			return vec3(-1, vitesseKart.y * 0.5, 0);
+		}
+		if (point.y < racetrack_length && point.y > 0 && point.x < -disc_radius)
+		{
+			return vec3(1, vitesseKart.y, 0);
+		}
+		if (point.y < 0 && norm(point) > disc_radius)
+		{
+			vec3 radial = (point) / norm(point);
+			vec3 orthoradial = rot90 * radial;
+			return -radial * 1.2 + 0.6 * (orthoradial.x * vitesseKart.x + orthoradial.y * vitesseKart.y) * orthoradial;
+		}
+		if (point.y < 0 && norm(point) < turn_radius)
+		{
+			vec3 radial = (point) / norm(point);
+			vec3 orthoradial = rot90 * radial;
+			return radial + 0.6 * (orthoradial.x * vitesseKart.x + orthoradial.y * vitesseKart.y) * orthoradial;
+		}
 	}
 	return vec3(0,0,0);
 }
