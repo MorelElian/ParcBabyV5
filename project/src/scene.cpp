@@ -266,8 +266,6 @@ void scene_structure::display()
 		racetrack["departure_sign2"].drawable.texture = opengl_load_texture_image("assets/decompte/3.png");
 	}
 	
-	
-	else 
 	if (timer.t < 30 * camera + 3)
 	{
 		t = 1.1;
