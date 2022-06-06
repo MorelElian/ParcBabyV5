@@ -66,7 +66,7 @@ struct scene_structure {
 	cgp::buffer<cgp::vec3> key_positions_mario;
 	cgp::buffer<cgp::vec3> key_derivee;
 	cgp::buffer<float> key_times2;
-	bool camera = false;
+	bool camera = true;
 
 	float avancementKart = 1.011;
 	float avancementPrecedent = 1.1;
