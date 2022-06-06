@@ -17,7 +17,9 @@ public:
 	std::function<vec3(float, buffer<vec3>,buffer<float>)> fonctionInterpolation;
 	vec3 positionKart(int deplacement);
 	vec3 positionKart();
+	vec3 positionKart(float t);
 	vec3 positionKartPrec();
+	vec3 positionKartPrec(float t);
 	vec3 positionWagon(float delta);
 	vec3 positionWagonPrec(float delta);
 	Trajectoire() = default;

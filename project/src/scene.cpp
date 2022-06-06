@@ -129,17 +129,15 @@ void scene_structure::initialize()
 
 	kartMario = new Kart("kartMario", "assets/sigleMario.png", 1.2, 0.4, 0.15, 3.0, vec3(1.0, 0.0, 0), vec3(0, 0, 1.0));
 
-	kartDep = new Kart("kartMario", "assets/personnages/sigleBowser.png", 1.2, 0.4, 0.15, 3.0, vec3(0.1, 0.1, 0.1), vec3(1.0, 0, 0.0),vec3(12,0,0));
+	kartDep = new Kart("kartMario", "assets/personnages/sigleBowser.png", 1.2, 0.4, 0.15, 3.0, vec3(0.1, 0.1, 0.1), vec3(1.0, 0, 0.0), vec3(3.0 * disc_radius / 5.0 , racetrack_length/5.0, 0));
 	// Key 3D positions
 
 	// Initialize the helping structure to display/interact with these positions
 	keyframe.initialize(key_positions, key_times);
 
 	int N = key_times.size();
-	// timer.t_min = key_times[1];
-	// timer.t_max = key_times[N - 2];
-	// timer.t = timer.t_min;
-	//int idx = find_index_of_interval(2.0, key_times);
+	timer.start();
+	t = 1.001;
 }
 
 void scene_structure::update_camera()
@@ -172,7 +170,6 @@ void scene_structure::update_cameraManuelle()
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
-
 void scene_structure::update_cameraArriere()
 {
 
@@ -191,7 +188,6 @@ void scene_structure::update_cameraArriereManuelle()
 	vec3 regardCamera = p + vec3(0, 0, 2.0);
 	environment.camera.look_at(posCamera, regardCamera);
 }
-
 void scene_structure::update_cameraPresentationA()
 {
 	vec3 posCameraPres = tCameraA.positionKart(1);
@@ -252,7 +248,19 @@ void scene_structure::display()
 	
 	// Update the current time
 	timer.update();
-
+	std::cout << timer.t << std::endl;
+	if (timer.t < 33.0)
+	{
+		t = 1.1;
+	}
+	else
+	{
+		if (t > 9.0)
+		{
+			t = 1.0;
+		}
+		t += 0.03;
+	}
 	train->faireAvancerTrain();
 	for(int i = 0; i < train->nb_wagon; i++){
 		//std::cout << typeid(train[i]) << endl;
@@ -270,16 +278,13 @@ void scene_structure::display()
 	//vec3 p_p = derivee_hermite(t, keyframe.key_positions, keyframe.key_times,key_derivee);
 	
 	Trajectoire t1("t1",key_positions_mario,key_times_mario, interpolation);
-	kartMario->faireAvancerKart(2, t1);
+	kartMario->faireAvancerKart(t, t1);
 	kartMario->kart.update_local_to_global_coordinates();
-	if (update_camera_actif || true)
+    for (int i = 0; i < nTraj; i++)
 	{
-		for (int i = 0; i < nTraj; i++)
-		{
-			tabKart[i].faireAvancerKart(2, tabTrajectoire[i]);
-			tabKart[i].kart.update_local_to_global_coordinates();
-			draw(tabKart[i].kart, environment);
-		}
+		tabKart[i].faireAvancerKart(t, tabTrajectoire[i]);
+		tabKart[i].kart.update_local_to_global_coordinates();
+		draw(tabKart[i].kart, environment);
 	}
 	draw(kartMario->kart, environment);
 	float pressForward = 0;
@@ -308,11 +313,10 @@ void scene_structure::display()
 	}
 	else
 	{
-		kartDep->drift = false;
+		kartDep->drift = true;
 	}
 	//std::cout << pressForward << std::endl;
 	kartDep->udpatePositionKart(pressForward,0.1,tabKart);
-	
 	kartDep->kart.update_local_to_global_coordinates();
 	draw(kartDep->kart, environment);
 	//draw(kartLuigi, environment);

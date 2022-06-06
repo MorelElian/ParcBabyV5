@@ -55,10 +55,10 @@ Kart::Kart(const char* _nomKart, const char* _nFileFrontKart, float _longueur_ka
 	
 	//kart["baseKartTheorique"].transform.rotation = rotation_transform::from_axis_angle({ 0,0,1 }, Pi / 2);
 }
-void Kart::faireAvancerKart(int deplacement, Trajectoire traj)
+void Kart::faireAvancerKart(float t, Trajectoire traj)
 {
-	vec3 p = traj.positionKart(deplacement);
-	vec3 p_prec = traj.positionKartPrec();
+	vec3 p = traj.positionKart(t);
+	vec3 p_prec = traj.positionKartPrec(t);
 	positionKart = p;
 	orientationKart = (p - p_prec) / norm(p - p_prec);
 	kart["baseKart"].transform.rotation = rotation_transform::between_vector(vec3(1, 0, 0), (p - p_prec) / norm(p- p_prec));
