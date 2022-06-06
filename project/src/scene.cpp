@@ -18,6 +18,7 @@ int extern turn_resolution;
 float extern departure_height;
 float extern departure_thickness;
 float extern departure_radius;
+float extern sign_height;
 
 float extern tube_height;
 float extern tube_thickness;
@@ -53,16 +54,21 @@ void scene_structure::initialize()
 	racetrack = create_racetrack_mesh_drawable();
 	rollercoaster = create_rollercoaster_mesh_drawable();
 	
+	nb_wagon = 10;
+	delta = 0.15f;
 	buffer<vec3> extern key_positions_rc;
 	buffer<float> extern key_steps;
 	traj_wagon = Trajectoire("train", key_positions_rc, key_steps, interpolation);
-	train = new Train(10, traj_wagon);
+	train = new Train(nb_wagon, traj_wagon, delta);
 	
 
 	//CAMERA
-	vec3 pA0 = {disc_radius / (2.0),racetrack_length / 2.0f ,10};
+	
+
+	//vec3 pA0 = {disc_radius / (2.0),racetrack_length / 2.0f ,10};
 	vec3 pA1 = { 5.0 * disc_radius, -racetrack_length / 2.0f ,7};
-	vec3 pA2 = { 5.0 * disc_radius ,racetrack_length / 2.0f,5};
+	vec3 pA2 = { 5.0 * disc_radius, -racetrack_length / 2.0f ,7};
+	//vec3 pA2 = { 5.0 * disc_radius ,racetrack_length / 2.0f,5};
 	vec3 pA3 = {3 * disc_radius ,racetrack_length ,5};
 	vec3 pA4 = {0,racetrack_length + disc_radius / 2.0f ,6};
 	vec3 pA5 = {-disc_radius,racetrack_length + disc_radius / 2.0f ,4};
@@ -71,11 +77,32 @@ void scene_structure::initialize()
 	vec3 pA8 = {disc_radius / (2.0),racetrack_length / 2.8f ,10};
 	vec3 pA9 = {disc_radius / (2.0),racetrack_length / 2.0f ,10};
 
-	buffer<vec3> key_positions_camA = {pA0, pA1, pA2, pA3, pA4, pA5, pA6, pA7, pA8, pA9};
-	buffer<float> key_times_camA = { 0.0f, 1.0f, 5.0f, 7.0f, 12.0f, 14.0f,16.0f, 17.0f, 19.0f ,21.0f};
+	buffer<vec3> key_positions_camA = {pA2, pA2, pA3, pA3};
+	buffer<float> key_times_camA = { 0.0f, 1.0f, 7.0f, 19.0f};
 	tCameraA = Trajectoire("tCameraA", key_positions_camA, key_times_camA, interpolation);
 
-	tCameraB = Trajectoire("tCameraB", key_positions_rc, key_steps, interpolation);
+	vec3 pB1 = {0, racetrack_length/2.0f, 170};
+	vec3 pB2 = {0, racetrack_length/2.0f, 25};
+
+	buffer<vec3> key_positions_camB = {pB1, pB1, pB2, pB2};
+	buffer<float> key_times_camB = { 0.0f, 5.0f, 18.0f, 19.0f};
+	tCameraB = Trajectoire("tCameraB", key_positions_camB, key_times_camB, interpolation);
+
+	tCameraC = Trajectoire("tCameraC", key_positions_rc, key_steps, interpolation);
+
+	vec3 pD1 = {disc_radius/2.0f, racetrack_length*1.5, 3};
+	vec3 pD2 = {disc_radius/2.0f, racetrack_length/4.0f, 3};
+	buffer<vec3> key_positions_camD = {pD1, pD1, pD1, pD2, pD2};
+	buffer<float> key_times_camD = { 0.0f, 1.0f, 20.0f, 25.0f, 31.0f};
+
+	tCameraD = Trajectoire("tCameraD", key_positions_camD, key_times_camD, interpolation);
+
+	vec3 pE1 = {(disc_radius-turn_radius)/2.0f + turn_radius, 0, 0.5f};
+	vec3 pE2 = {(disc_radius-turn_radius)/2.0f + turn_radius, racetrack_length/3.0f, departure_height + sign_height/2.0f};
+	buffer<vec3> key_positions_camE = {pE1, pE1, pE1, pE2, pE2, pE2};
+	buffer<float> key_times_camE = { 0.0f, 1.0f, 24.0f, 29.0f, 37.0f, 40.0f};
+
+	tCameraE = Trajectoire("tCameraE", key_positions_camE, key_times_camE, interpolation);
 	
 	//Initialisation trajectoires
 	tabTrajectoire = new Trajectoire[nTraj];
@@ -172,11 +199,29 @@ void scene_structure::update_cameraPresentationA()
 }
 void scene_structure::update_cameraPresentationB()
 {
-	vec3 posCameraPres = tCameraB.positionKart(1);
-	posCameraPres.z += 1;
-	environment.camera.look_at(posCameraPres, { disc_radius / (2.0),racetrack_length / 2.0f ,8 });
+	vec3 p_cam = tCameraB.positionKart(1);
+	vec3 p_dir = {0, racetrack_length/2.0f, 0};
+	environment.camera.look_at(p_cam, p_dir);
 }
-
+void scene_structure::update_cameraPresentationC()
+{
+	vec3 p_cam = tCameraC.positionWagon(delta*(nb_wagon + 1));
+	vec3 p_dir = tCameraC.positionWagonPrec(delta*(nb_wagon + 1) + 0.5);
+	p_cam.z += 3;
+	environment.camera.look_at(p_cam, p_dir);
+}
+void scene_structure::update_cameraPresentationD()
+{
+	vec3 p_cam = tCameraD.positionKart(1);
+	vec3 p_dir = {disc_radius/2.0f, 0, 0};
+	environment.camera.look_at(p_cam, p_dir);
+}
+void scene_structure::update_cameraPresentationE()
+{
+	vec3 p_cam = tCameraE.positionKart(1);
+	vec3 p_dir = {(disc_radius-turn_radius)/2.0f + turn_radius, racetrack_length/2.0f, departure_height + sign_height/2.0f};
+	environment.camera.look_at(p_cam, p_dir);
+}
 
 void scene_structure::display()
 {

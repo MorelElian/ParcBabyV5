@@ -229,16 +229,16 @@ vec3 aaa = {0,1,1};
 
 buffer<vec3> train_colors = {red, green, blue, yellow, aaa};
 
-Train::Train(int _nb_wagon, Trajectoire traj){
+Train::Train(int _nb_wagon, Trajectoire traj, float _delta){
     nb_wagon = _nb_wagon;
     train = new Wagon[nb_wagon];
     int nb_colors = train_colors.size();
     for(int i = 0; i < nb_wagon; i++){
         train[i] = Wagon(traj, train_colors[i % nb_colors]);
     }
+    delta = _delta;
 }
 
-float delta = 0.15f;
 
 void Train::faireAvancerTrain(){
     for(int i = 0; i < nb_wagon; i++){

@@ -62,15 +62,26 @@ int main(int, char* argv[])
 		// Call the display of the scene
 		timerBase.update();
 
-		// if (timerBase.t < 17.0 && camera)
-		// {
-		// 	scene.update_cameraPresentationA();
-		// }else 
-		if (timerBase.t < 24.0 && camera)
+		if (timerBase.t < 5.0 && camera)
+		{
+			scene.update_cameraPresentationA();
+		}
+		else if (timerBase.t < 10.0 && camera)
 		{
 			scene.update_cameraPresentationB();
 		}
-
+		else if (timerBase.t < 19.0 && camera)
+		{
+			scene.update_cameraPresentationC();
+		}
+		else if (timerBase.t < 23.0 && camera)
+		{
+			scene.update_cameraPresentationD();
+		}
+		else if (timerBase.t < 30.0 && camera)
+		{
+			scene.update_cameraPresentationE();
+		}
 		else if (!scene.inputs.keyboard.shift)
 		{
 			//std::cout << "shift" << std::endl;
